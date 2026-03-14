@@ -1,0 +1,679 @@
+--[[
+    ZAYN PRIVATE HUB - 2026
+    Professional Framework Integration
+]]
+
+local game = game
+local GetService = game.GetService
+if (not game.IsLoaded(game)) then
+    local Loaded = game.Loaded
+    Loaded.Wait(Loaded);
+end
+
+local _L = {}
+
+_L.start = start or tick();
+local Debug = true
+
+-- Zayn Hub Multi-Load Protection
+do
+    local ZAYN_CORE = getgenv().ZAYN_HUB
+    if (ZAYN_CORE) then
+        local Notify = ZAYN_CORE.Utils.Notify
+        local UserInputService = GetService(game, "UserInputService");
+        return Notify(nil, "ZAYN HUB", "Zayn Hub is already running! Use 'kill' to restart.", nil)
+    end
+end
+
+-- Zayn Service Provider
+local Services = {
+    Workspace = GetService(game, "Workspace");
+    UserInputService = GetService(game, "UserInputService");
+    ReplicatedStorage = GetService(game, "ReplicatedStorage");
+    StarterPlayer = GetService(game, "StarterPlayer");
+    StarterPack = GetService(game, "StarterPack");
+    StarterGui = GetService(game, "StarterGui");
+    TeleportService = GetService(game, "TeleportService");
+    CoreGui = GetService(game, "CoreGui");
+    TweenService = GetService(game, "TweenService");
+    HttpService = GetService(game, "HttpService");
+    TextService = GetService(game, "TextService");
+    MarketplaceService = GetService(game, "MarketplaceService");
+    Chat = GetService(game, "Chat");
+    Teams = GetService(game, "Teams");
+    SoundService = GetService(game, "SoundService");
+    Lighting = GetService(game, "Lighting");
+    ScriptContext = GetService(game, "ScriptContext");
+    Stats = GetService(game, "Stats");
+}
+
+-- Automatic Service Fetcher for Zayn Hub
+setmetatable(Services, {
+    __index = function(Table, Property)
+        local Ret, Service = pcall(GetService, game, Property);
+        if (Ret) then
+            Services[Property] = Service
+            return Service
+        end
+        return nil
+    end,
+    __mode = "v"
+});
+
+-- Register Global Zayn Variable
+getgenv().ZAYN_HUB = {
+    Version = "1.0.0",
+    Services = Services,
+    Utils = {} -- Future utilities will go here
+}
+
+print("⚡ Zayn Private Hub: Framework Loaded Successfully ⚡")
+-- [[ ZAYN HUB - CORE LOCALIZATION (RECHECKED) ]] --
+
+-- Localization of Global Methods (For 10x Speed)
+local GetChildren, GetDescendants = game.GetChildren, game.GetDescendants
+local IsA = game.IsA
+local FindFirstChild, FindFirstChildOfClass, FindFirstChildWhichIsA, WaitForChild = 
+    game.FindFirstChild,
+    game.FindFirstChildOfClass,
+    game.FindFirstChildWhichIsA,
+    game.WaitForChild
+
+local GetPropertyChangedSignal, Changed = 
+    game.GetPropertyChangedSignal,
+    game.Changed
+    
+local Destroy, Clone = game.Destroy, game.Clone
+
+-- RunService Events (Heartbeat for logic, RenderStepped for UI)
+local Heartbeat, Stepped, RenderStepped;
+do
+    local RunService = Services.RunService;
+    Heartbeat, Stepped, RenderStepped =
+        RunService.Heartbeat,
+        RunService.Stepped,
+        RunService.RenderStepped
+end
+
+local Players = Services.Players
+local GetPlayers = Players.GetPlayers
+
+-- HttpService (Used for Zayn Global Sync)
+local JSONEncode, JSONDecode, GenerateGUID = 
+    Services.HttpService.JSONEncode, 
+    Services.HttpService.JSONDecode,
+    Services.HttpService.GenerateGUID
+
+local Camera = Services.Workspace.CurrentCamera
+
+-- Table Optimization
+local Tfind, sort, concat, pack, unpack;
+do
+    local table = table
+    Tfind, sort, concat, pack, unpack = 
+        table.find, 
+        table.sort,
+        table.concat,
+        table.pack,
+        table.unpack
+end
+
+-- String Optimization
+local lower, upper, Sfind, split, sub, format, len, match, gmatch, gsub, byte;
+do
+    local string = string
+    lower, upper, Sfind, split, sub, format, len, match, gmatch, gsub, byte = 
+        string.lower,
+        string.upper,
+        string.find,
+        string.split, 
+        string.sub,
+        string.format,
+        string.len,
+        string.match,
+        string.gmatch,
+        string.gsub,
+        string.byte
+end
+
+-- Math Optimization
+local random, floor, round, abs, atan, cos, sin, rad;
+do
+    local math = math
+    random, floor, round, abs, atan, cos, sin, rad = 
+        math.random,
+        math.floor,
+        math.round,
+        math.abs,
+        math.atan,
+        math.cos,
+        math.sin,
+        math.rad
+end
+
+local InstanceNew = Instance.new
+local CFrameNew = CFrame.new
+local Vector3New = Vector3.new
+
+-- CFrame Logic (Used for TP and Flight)
+local Inverse, toObjectSpace, components
+do
+    local CalledCFrameNew = CFrameNew();
+    Inverse = CalledCFrameNew.Inverse
+    toObjectSpace = CalledCFrameNew.toObjectSpace
+    components = CalledCFrameNew.components
+end
+
+local Connection = game.Loaded
+local CWait = Connection.Wait
+local CConnect = Connection.Connect
+
+local Disconnect;
+do
+    local CalledConnection = CConnect(Connection, function() end);
+    Disconnect = CalledConnection.Disconnect
+end
+
+-- Humanoid Reference (For Character Mods)
+local __H = InstanceNew("Humanoid");
+local UnequipTools = __H.UnequipTools
+local ChangeState = __H.ChangeState
+local SetStateEnabled = __H.SetStateEnabled
+local GetState = __H.GetState
+local GetAccessories = __H.GetAccessories
+
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui =  FindFirstChildWhichIsA(LocalPlayer, "PlayerGui");
+local Mouse = LocalPlayer.GetMouse(LocalPlayer);
+
+-- Zayn Hub Thread Handler (Fixed Error Logging)
+local CThread;
+do
+    local wrap = coroutine.wrap
+    CThread = function(Func, ...)
+        if (type(Func) ~= 'function') then
+            return nil
+        end
+        local Varag = ...
+        return function()
+            local Success, Ret = pcall(wrap(Func, Varag));
+            if (Success) then
+                return Ret
+            end
+            if (Debug) then
+                -- Rechecked: Credits now strictly Zayn Hub
+                warn("[ZAYN Error]: " .. debug.traceback(Ret));
+            end
+        end
+    end
+end
+-- [[ ZAYN HUB - UTILITIES & TABLE LOGIC ]] --
+
+local startsWith = function(str, searchString, rawPos)
+    local pos = rawPos or 1
+    return searchString == "" and true or sub(str, pos, pos) == searchString
+end
+
+local trim = function(str)
+    return gsub(str, "^%s*(.-)%s*$", "%1");
+end
+
+-- Zayn Optimized Table Concat
+local tbl_concat = function(...)
+    local new = {}
+    for _, v in next, {...} do
+        if type(v) == 'table' then
+            for i2, v2 in next, v do
+                new[i2] = v2
+            end
+        end
+    end
+    return new
+end
+
+local indexOf = function(tbl, val)
+    if (type(tbl) == 'table') then
+        for i, v in next, tbl do
+            if (v == val) then
+                return i
+            end
+        end
+    end
+end
+
+local forEach = function(tbl, ret)
+    for i, v in next, tbl do
+        ret(i, v);
+    end
+end
+
+local filter = function(tbl, ret)
+    if (type(tbl) == 'table') then
+        local new = {}
+        for i, v in next, tbl do
+            if (ret(i, v)) then
+                new[#new + 1] = v
+            end
+        end
+        return new
+    end
+end
+
+local map = function(tbl, ret)
+    if (type(tbl) == 'table') then
+        local new = {}
+        for i, v in next, tbl do
+            local Value, Key = ret(i, v);
+            new[Key or #new + 1] = Value
+        end
+        return new
+    end
+end
+
+-- Zayn Deep Search Logic (Recursive)
+local deepsearch;
+deepsearch = function(tbl, ret)
+    if (type(tbl) == 'table') then
+        for i, v in next, tbl do
+            if (type(v) == 'table') then
+                deepsearch(v, ret);
+            end
+            ret(i, v);
+        end
+    end
+end
+
+local deepsearchset;
+deepsearchset = function(tbl, ret, value)
+    if (type(tbl) == 'table') then
+        local new = {}
+        for i, v in next, tbl do
+            new[i] = v
+            if (type(v) == 'table') then
+                new[i] = deepsearchset(v, ret, value);
+            end
+            if (ret(i, v)) then
+                new[i] = value(i, v);
+            end
+        end
+        return new
+    end
+end
+
+local flat = function(tbl)
+    if (type(tbl) == 'table') then
+        local new = {}
+        deepsearch(tbl, function(i, v)
+            if (type(v) ~= 'table') then
+                new[#new + 1] = v
+            end
+        end)
+        return new
+    end
+end
+
+local flatMap = function(tbl, ret)
+    if (type(tbl) == 'table') then
+        local new = flat(map(tbl, ret));
+        return new
+    end
+end
+
+local shift = function(tbl)
+    if (type(tbl) == 'table') then
+        local firstVal = tbl[1]
+        tbl = pack(unpack(tbl, 2, #tbl));
+        tbl.n = nil
+        return tbl
+    end
+end
+
+local keys = function(tbl)
+    if (type(tbl) == 'table') then
+        local new = {}
+        for i, v in next, tbl do
+            new[#new + 1] = i	
+        end
+        return new
+    end
+end
+
+-- Zayn Hub Secure Clone Function
+local function clone(toClone, shallow)
+    if (type(toClone) == 'function' and clonefunction) then
+        return clonefunction(toClone);
+    end
+    local new = {}
+    for i, v in pairs(toClone) do
+        if (type(v) == 'table' and not shallow) then
+            v = clone(v);
+        end
+        new[i] = v
+    end
+    return new
+end
+-- [[ ZAYN HUB - ADVANCED PROTECTION & HOOKING ]] --
+
+local setthreadidentity = setthreadidentity or syn_context_set or setthreadcontext or (syn and syn.set_thread_identity)
+local getthreadidentity = getthreadidentity or syn_context_get or getthreadcontext or (syn and syn.get_thread_identity)
+
+-- Zayn Character Utility
+local GetCharacter = GetCharacter or function(Plr)
+    return Plr and Plr.Character or LocalPlayer.Character
+end
+
+local Utils = {}
+
+-- Extension Imports
+local Stats = Services.Stats
+local ContentProvider = Services.ContentProvider
+
+local firetouchinterest, hookfunction;
+do
+    local GEnv = getgenv();
+    local touched = {}
+    
+    -- Zayn Secure Touch Interest
+    firetouchinterest = GEnv.firetouchinterest or function(part1, part2, toggle)
+        if (part1 and part2) then
+            if (toggle == 0) then
+                touched[1] = part1.CFrame
+                part1.CFrame = part2.CFrame
+            else
+                part1.CFrame = touched[1]
+                touched[1] = nil
+            end
+        end
+    end
+
+    local newcclosure = newcclosure or function(f)
+        return f
+    end
+
+    -- Zayn Secure Function Hooking
+    hookfunction = GEnv.hookfunction or function(func, newfunc, applycclosure)
+        if (replaceclosure) then
+            replaceclosure(func, newfunc);
+            return func
+        end
+        func = applycclosure and newcclosure or newfunc
+        return func
+    end
+end
+
+-- Connection Caching for Zayn Hub
+if (not syn_context_set) then
+    local CachedConnections = setmetatable({}, {
+        __mode = "v"
+    });
+
+    GEnv = getgenv();
+    getconnections = function(Connection, FromCache, AddOnConnect)
+        local getconnections = GEnv.getconnections
+        if (not getconnections) then
+            return {}
+        end
+
+        local CachedConnection;
+        for i, v in next, CachedConnections do
+            if (i == Connection) then
+                CachedConnection = v
+                break;
+            end
+        end
+        if (CachedConnection and FromCache) then
+            return CachedConnection
+        end
+
+        local Connections = GEnv.getconnections(Connection);
+        CachedConnections[Connection] = Connections
+        return Connections
+    end
+end
+
+-- Metatable & Caller Checks
+local getrawmetatable = getrawmetatable or function()
+    return setmetatable({}, {});
+end
+
+local getnamecallmethod = getnamecallmethod or function()
+    return ""
+end
+
+local checkcaller = checkcaller or function()
+    return false
+end
+
+-- Zayn Default Hooks Configuration
+local Hooks = {
+    AntiKick = false,
+    AntiTeleport = false,
+    NoJumpCooldown = false,
+}
+
+local mt = getrawmetatable(game);
+local OldMetaMethods = {}
+setreadonly(mt, false);
+for i, v in next, mt do
+    OldMetaMethods[i] = v
+end
+setreadonly(mt, true);
+local MetaMethodHooks = {}
+
+-- Zayn Instance Protection System
+local ProtectInstance, SpoofInstance, SpoofProperty;
+local pInstanceCount = {0, 0}; -- instancecount, primitivescount
+local ProtectedInstances = setmetatable({}, {
+    __mode = "v"
+});
+local FocusedTextBox = nil
+
+do
+    local SpoofedInstances = setmetatable({}, {
+        __mode = "v"
+    });
+    local SpoofedProperties = {}
+    Hooks.SpoofedProperties = SpoofedProperties
+
+    local otherCheck = function(instance, n)
+        if (IsA(instance, "ImageLabel") or IsA(instance, "ImageButton")) then
+            ProtectedInstances[#ProtectedInstances + 1] = instance
+            return;
+        end
+
+        if (IsA(instance, "BasePart")) then
+            pInstanceCount[2] = math.max(pInstanceCount[2] + (n or 1), 0);
+        end
+    end
+
+    -- Core Protection Function (Strict Zayn Identity)
+    ProtectInstance = function(Instance_)
+        if (not Tfind(ProtectedInstances, Instance_)) then
+            ProtectedInstances[#ProtectedInstances + 1] = Instance_
+            local descendants = Instance_:GetDescendants();
+            pInstanceCount[1] = pInstanceCount[1] + 1 + #descendants;
+            for i = 1, #descendants do
+                otherCheck(descendants[i]);
+            end
+            local dAdded = Instance_.DescendantAdded:Connect(function(descendant)
+                pInstanceCount[1] = pInstanceCount[1] + 1
+                otherCheck(descendant);
+            end);
+            local dRemoving = Instance_.DescendantRemoving:Connect(function(descendant)
+                pInstanceCount[1] = math.max(pInstanceCount[1] - 1, 0);
+                otherCheck(descendant, -1);
+            end);
+            otherCheck(Instance_);
+
+            -- Randomizing Name for Security
+            Instance_.Name = sub(gsub(GenerateGUID(Services.HttpService, false), '-', ''), 1, random(25, 30));
+            Instance_.Archivable = false
+        end
+    end
+end
+-- [[ ZAYN HUB - NAMECALL HOOKS & INSTANCE SPOOFING ]] --
+
+    -- Zayn Instance Spoofing System
+    SpoofInstance = function(Instance_, Instance2)
+        if (not SpoofedInstances[Instance_]) then
+            -- Creates a fake copy to trick the game's detection
+            SpoofedInstances[Instance_] = Instance2 and Instance2 or Clone(Instance_);
+        end
+    end
+
+    UnSpoofInstance = function(Instance_)
+        if (SpoofedInstances[Instance_]) then
+            SpoofedInstances[Instance_] = nil
+        end
+    end
+    
+    local ChangedSpoofedProperties = {}
+    
+    -- Zayn Property Spoofing (Tricks the game into reading fake values)
+    SpoofProperty = function(Instance_, Property, NoClone)
+        if (SpoofedProperties[Instance_]) then
+            local SpoofedPropertiesForInstance = SpoofedProperties[Instance_]
+            local Properties = map(SpoofedPropertiesForInstance, function(i, v)
+                return v.Property
+            end)
+            if (not Tfind(Properties, Property)) then
+                SpoofedProperties[Instance_][#SpoofedPropertiesForInstance + 1] = {
+                    SpoofedProperty = SpoofedPropertiesForInstance[1].SpoofedProperty,
+                    Property = Property,
+                };
+            end
+        else
+            local Cloned;
+            if (not NoClone and IsA(Instance_, "Instance") and not Services[tostring(Instance_)] and Instance_.Archivable) then
+                local Success, Ret = pcall(Clone, Instance_);
+                if (Success) then
+                    Cloned = Ret
+                end
+            end
+            SpoofedProperties[Instance_] = {{
+                SpoofedProperty = Cloned and Cloned or {[Property]=Instance_[Property]},
+                Property = Property,
+            }}
+            ChangedSpoofedProperties[Instance_] = {}
+        end
+    end
+
+    local GetAllParents = function(Instance_, NIV)
+        if (typeof(Instance_) == "Instance") then
+            local Parents = {}
+            local Current = NIV or Instance_
+            if (NIV) then
+                Parents[#Parents + 1] = Current
+            end
+            repeat
+                local Parent = Current.Parent
+                Parents[#Parents + 1] = Parent
+                Current = Parent
+            until not Current
+            return Parents
+        end
+        return {}
+    end
+
+    local Methods = {
+        "FindFirstChild",
+        "FindFirstChildWhichIsA",
+        "FindFirstChildOfClass",
+        "IsA"
+    }
+
+    local lockedInstances = {};
+    setmetatable(lockedInstances, { __mode = "k" });
+    
+    -- Zayn Protection Check (Hides Zayn Hub from Game Scripts)
+    local isProtected = function(instance)
+        if (lockedInstances[instance]) then
+            return true;
+        end
+
+        local good2 = pcall(tostring, instance);
+        if (not good2) then
+            lockedInstances[instance] = true
+            return true;
+        end
+
+        for i2 = 1, #ProtectedInstances do
+            local pInstance = ProtectedInstances[i2]
+            if (pInstance == instance) then
+                return true;
+            end
+        end
+        return false;
+    end
+
+    -- THE CORE HOOK: Zayn Namecall Interceptor
+    MetaMethodHooks.Namecall = function(...)
+        local __Namecall = OldMetaMethods.__namecall;
+        local Args = {...}
+        local self = Args[1]
+        local Method = getnamecallmethod() or "";
+
+        if (Method ~= "") then
+            local Success, result = pcall(OldMetaMethods.__index, self, Method);
+            if (not Success or Success and type(result) ~= "function") then
+                return __Namecall(...);
+            end
+        end
+
+        -- Zayn Anti-Kick System
+        if (Hooks.AntiKick and lower(Method) == "kick") then
+            local Player, Message = self, Args[2]
+            if (Hooks.AntiKick and Player == LocalPlayer) then
+                local Notify = Utils.Notify
+                local Context;
+                if (setthreadidentity) then
+                    Context = getthreadidentity();
+                    setthreadidentity(3);
+                end
+                if (Notify and Context) then
+                    Notify(nil, "ZAYN HUB: Kick Blocked", format("Game tried to kick you: %s", (Message and type(Message) == 'number' or type(Message) == 'string') and Message or "No reason"));
+                    setthreadidentity(Context);
+                end
+                return
+            end
+        end
+
+        -- Zayn Anti-Teleport System
+        if (Hooks.AntiTeleport and (Method == "Teleport" or Method == "TeleportToPlaceInstance")) then
+            local Player, PlaceId = self, Args[2]
+            if (Hooks.AntiTeleport and Player == LocalPlayer) then
+                local Notify = Utils.Notify
+                local Context;
+                if (setthreadidentity) then
+                    Context = getthreadidentity();
+                    setthreadidentity(3);
+                end
+                if (Notify and Context) then
+                    Notify(nil, "ZAYN HUB: Teleport Blocked", format("Game tried to move you to: %s", PlaceId or "Unknown"));
+                    setthreadidentity(Context);
+                end
+                return
+            end
+        end
+
+        if (checkcaller()) then
+            return __Namecall(...);
+        end
+
+        -- Hiding Zayn Hub Instances from Game Methods
+        if (Tfind(Methods, Method)) then
+            local ReturnedInstance = __Namecall(...);
+            if (Tfind(ProtectedInstances, ReturnedInstance)) then
+                return Method == "IsA" and false or nil
+            end
+        end
+
+        -- Optimized Hooking for Zayn Hub v1
+        if (Method == "children" or Method == "GetChildren" or Method ==  "getChildren" or Method == "GetDescendants" or Method == "getDescendants") then
+            return filter(__Namecall(...), function(i, instance)
+                return not isProtected(instance);
+            end);
+        end
+
+        -- Secure TextBox Handling
+        if (self == Services.UserInputService and (Method == "GetFocusedTextBox" or Method == "getFocusedTextBox")) then
