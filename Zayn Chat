@@ -1,0 +1,4431 @@
+--[[
+    ZAYN PRIVATE HUB - 2026
+    Professional Framework Integration
+]]
+
+local game = game
+local GetService = game.GetService
+if (not game.IsLoaded(game)) then
+    local Loaded = game.Loaded
+    Loaded.Wait(Loaded);
+end
+
+local _L = {}
+
+_L.start = start or tick();
+local Debug = true
+
+-- Zayn Hub Multi-Load Protection
+do
+    local ZAYN_CORE = getgenv().ZAYN_HUB
+    if (ZAYN_CORE) then
+        local Notify = ZAYN_CORE.Utils.Notify
+        local UserInputService = GetService(game, "UserInputService");
+        return Notify(nil, "ZAYN HUB", "Zayn Hub is already running! Use 'kill' to restart.", nil)
+    end
+end
+
+-- Zayn Service Provider
+local Services = {
+    Workspace = GetService(game, "Workspace");
+    UserInputService = GetService(game, "UserInputService");
+    ReplicatedStorage = GetService(game, "ReplicatedStorage");
+    StarterPlayer = GetService(game, "StarterPlayer");
+    StarterPack = GetService(game, "StarterPack");
+    StarterGui = GetService(game, "StarterGui");
+    TeleportService = GetService(game, "TeleportService");
+    CoreGui = GetService(game, "CoreGui");
+    TweenService = GetService(game, "TweenService");
+    HttpService = GetService(game, "HttpService");
+    TextService = GetService(game, "TextService");
+    MarketplaceService = GetService(game, "MarketplaceService");
+    Chat = GetService(game, "Chat");
+    Teams = GetService(game, "Teams");
+    SoundService = GetService(game, "SoundService");
+    Lighting = GetService(game, "Lighting");
+    ScriptContext = GetService(game, "ScriptContext");
+    Stats = GetService(game, "Stats");
+}
+
+-- Automatic Service Fetcher for Zayn Hub
+setmetatable(Services, {
+    __index = function(Table, Property)
+        local Ret, Service = pcall(GetService, game, Property);
+        if (Ret) then
+            Services[Property] = Service
+            return Service
+        end
+        return nil
+    end,
+    __mode = "v"
+});
+
+-- Register Global Zayn Variable
+getgenv().ZAYN_HUB = {
+    Version = "1.0.0",
+    Services = Services,
+    Utils = {} -- Future utilities will go here
+}
+
+print("⚡ Zayn Private Hub: Framework Loaded Successfully ⚡")
+-- [[ ZAYN HUB - CORE LOCALIZATION (RECHECKED) ]] --
+
+-- Localization of Global Methods (For 10x Speed)
+local GetChildren, GetDescendants = game.GetChildren, game.GetDescendants
+local IsA = game.IsA
+local FindFirstChild, FindFirstChildOfClass, FindFirstChildWhichIsA, WaitForChild = 
+    game.FindFirstChild,
+    game.FindFirstChildOfClass,
+    game.FindFirstChildWhichIsA,
+    game.WaitForChild
+
+local GetPropertyChangedSignal, Changed = 
+    game.GetPropertyChangedSignal,
+    game.Changed
+    
+local Destroy, Clone = game.Destroy, game.Clone
+
+-- RunService Events (Heartbeat for logic, RenderStepped for UI)
+local Heartbeat, Stepped, RenderStepped;
+do
+    local RunService = Services.RunService;
+    Heartbeat, Stepped, RenderStepped =
+        RunService.Heartbeat,
+        RunService.Stepped,
+        RunService.RenderStepped
+end
+
+local Players = Services.Players
+local GetPlayers = Players.GetPlayers
+
+-- HttpService (Used for Zayn Global Sync)
+local JSONEncode, JSONDecode, GenerateGUID = 
+    Services.HttpService.JSONEncode, 
+    Services.HttpService.JSONDecode,
+    Services.HttpService.GenerateGUID
+
+local Camera = Services.Workspace.CurrentCamera
+
+-- Table Optimization
+local Tfind, sort, concat, pack, unpack;
+do
+    local table = table
+    Tfind, sort, concat, pack, unpack = 
+        table.find, 
+        table.sort,
+        table.concat,
+        table.pack,
+        table.unpack
+end
+
+-- String Optimization
+local lower, upper, Sfind, split, sub, format, len, match, gmatch, gsub, byte;
+do
+    local string = string
+    lower, upper, Sfind, split, sub, format, len, match, gmatch, gsub, byte = 
+        string.lower,
+        string.upper,
+        string.find,
+        string.split, 
+        string.sub,
+        string.format,
+        string.len,
+        string.match,
+        string.gmatch,
+        string.gsub,
+        string.byte
+end
+
+-- Math Optimization
+local random, floor, round, abs, atan, cos, sin, rad;
+do
+    local math = math
+    random, floor, round, abs, atan, cos, sin, rad = 
+        math.random,
+        math.floor,
+        math.round,
+        math.abs,
+        math.atan,
+        math.cos,
+        math.sin,
+        math.rad
+end
+
+local InstanceNew = Instance.new
+local CFrameNew = CFrame.new
+local Vector3New = Vector3.new
+
+-- CFrame Logic (Used for TP and Flight)
+local Inverse, toObjectSpace, components
+do
+    local CalledCFrameNew = CFrameNew();
+    Inverse = CalledCFrameNew.Inverse
+    toObjectSpace = CalledCFrameNew.toObjectSpace
+    components = CalledCFrameNew.components
+end
+
+local Connection = game.Loaded
+local CWait = Connection.Wait
+local CConnect = Connection.Connect
+
+local Disconnect;
+do
+    local CalledConnection = CConnect(Connection, function() end);
+    Disconnect = CalledConnection.Disconnect
+end
+
+-- Humanoid Reference (For Character Mods)
+local __H = InstanceNew("Humanoid");
+local UnequipTools = __H.UnequipTools
+local ChangeState = __H.ChangeState
+local SetStateEnabled = __H.SetStateEnabled
+local GetState = __H.GetState
+local GetAccessories = __H.GetAccessories
+
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui =  FindFirstChildWhichIsA(LocalPlayer, "PlayerGui");
+local Mouse = LocalPlayer.GetMouse(LocalPlayer);
+
+-- Zayn Hub Thread Handler (Fixed Error Logging)
+local CThread;
+do
+    local wrap = coroutine.wrap
+    CThread = function(Func, ...)
+        if (type(Func) ~= 'function') then
+            return nil
+        end
+        local Varag = ...
+        return function()
+            local Success, Ret = pcall(wrap(Func, Varag));
+            if (Success) then
+                return Ret
+            end
+            if (Debug) then
+                -- Rechecked: Credits now strictly Zayn Hub
+                warn("[ZAYN Error]: " .. debug.traceback(Ret));
+            end
+        end
+    end
+end
+-- [[ ZAYN HUB - UTILITIES & TABLE LOGIC ]] --
+
+local startsWith = function(str, searchString, rawPos)
+    local pos = rawPos or 1
+    return searchString == "" and true or sub(str, pos, pos) == searchString
+end
+
+local trim = function(str)
+    return gsub(str, "^%s*(.-)%s*$", "%1");
+end
+
+-- Zayn Optimized Table Concat
+local tbl_concat = function(...)
+    local new = {}
+    for _, v in next, {...} do
+        if type(v) == 'table' then
+            for i2, v2 in next, v do
+                new[i2] = v2
+            end
+        end
+    end
+    return new
+end
+
+local indexOf = function(tbl, val)
+    if (type(tbl) == 'table') then
+        for i, v in next, tbl do
+            if (v == val) then
+                return i
+            end
+        end
+    end
+end
+
+local forEach = function(tbl, ret)
+    for i, v in next, tbl do
+        ret(i, v);
+    end
+end
+
+local filter = function(tbl, ret)
+    if (type(tbl) == 'table') then
+        local new = {}
+        for i, v in next, tbl do
+            if (ret(i, v)) then
+                new[#new + 1] = v
+            end
+        end
+        return new
+    end
+end
+
+local map = function(tbl, ret)
+    if (type(tbl) == 'table') then
+        local new = {}
+        for i, v in next, tbl do
+            local Value, Key = ret(i, v);
+            new[Key or #new + 1] = Value
+        end
+        return new
+    end
+end
+
+-- Zayn Deep Search Logic (Recursive)
+local deepsearch;
+deepsearch = function(tbl, ret)
+    if (type(tbl) == 'table') then
+        for i, v in next, tbl do
+            if (type(v) == 'table') then
+                deepsearch(v, ret);
+            end
+            ret(i, v);
+        end
+    end
+end
+
+local deepsearchset;
+deepsearchset = function(tbl, ret, value)
+    if (type(tbl) == 'table') then
+        local new = {}
+        for i, v in next, tbl do
+            new[i] = v
+            if (type(v) == 'table') then
+                new[i] = deepsearchset(v, ret, value);
+            end
+            if (ret(i, v)) then
+                new[i] = value(i, v);
+            end
+        end
+        return new
+    end
+end
+
+local flat = function(tbl)
+    if (type(tbl) == 'table') then
+        local new = {}
+        deepsearch(tbl, function(i, v)
+            if (type(v) ~= 'table') then
+                new[#new + 1] = v
+            end
+        end)
+        return new
+    end
+end
+
+local flatMap = function(tbl, ret)
+    if (type(tbl) == 'table') then
+        local new = flat(map(tbl, ret));
+        return new
+    end
+end
+
+local shift = function(tbl)
+    if (type(tbl) == 'table') then
+        local firstVal = tbl[1]
+        tbl = pack(unpack(tbl, 2, #tbl));
+        tbl.n = nil
+        return tbl
+    end
+end
+
+local keys = function(tbl)
+    if (type(tbl) == 'table') then
+        local new = {}
+        for i, v in next, tbl do
+            new[#new + 1] = i	
+        end
+        return new
+    end
+end
+
+-- Zayn Hub Secure Clone Function
+local function clone(toClone, shallow)
+    if (type(toClone) == 'function' and clonefunction) then
+        return clonefunction(toClone);
+    end
+    local new = {}
+    for i, v in pairs(toClone) do
+        if (type(v) == 'table' and not shallow) then
+            v = clone(v);
+        end
+        new[i] = v
+    end
+    return new
+end
+-- [[ ZAYN HUB - ADVANCED PROTECTION & HOOKING ]] --
+
+local setthreadidentity = setthreadidentity or syn_context_set or setthreadcontext or (syn and syn.set_thread_identity)
+local getthreadidentity = getthreadidentity or syn_context_get or getthreadcontext or (syn and syn.get_thread_identity)
+
+-- Zayn Character Utility
+local GetCharacter = GetCharacter or function(Plr)
+    return Plr and Plr.Character or LocalPlayer.Character
+end
+
+local Utils = {}
+
+-- Extension Imports
+local Stats = Services.Stats
+local ContentProvider = Services.ContentProvider
+
+local firetouchinterest, hookfunction;
+do
+    local GEnv = getgenv();
+    local touched = {}
+    
+    -- Zayn Secure Touch Interest
+    firetouchinterest = GEnv.firetouchinterest or function(part1, part2, toggle)
+        if (part1 and part2) then
+            if (toggle == 0) then
+                touched[1] = part1.CFrame
+                part1.CFrame = part2.CFrame
+            else
+                part1.CFrame = touched[1]
+                touched[1] = nil
+            end
+        end
+    end
+
+    local newcclosure = newcclosure or function(f)
+        return f
+    end
+
+    -- Zayn Secure Function Hooking
+    hookfunction = GEnv.hookfunction or function(func, newfunc, applycclosure)
+        if (replaceclosure) then
+            replaceclosure(func, newfunc);
+            return func
+        end
+        func = applycclosure and newcclosure or newfunc
+        return func
+    end
+end
+
+-- Connection Caching for Zayn Hub
+if (not syn_context_set) then
+    local CachedConnections = setmetatable({}, {
+        __mode = "v"
+    });
+
+    GEnv = getgenv();
+    getconnections = function(Connection, FromCache, AddOnConnect)
+        local getconnections = GEnv.getconnections
+        if (not getconnections) then
+            return {}
+        end
+
+        local CachedConnection;
+        for i, v in next, CachedConnections do
+            if (i == Connection) then
+                CachedConnection = v
+                break;
+            end
+        end
+        if (CachedConnection and FromCache) then
+            return CachedConnection
+        end
+
+        local Connections = GEnv.getconnections(Connection);
+        CachedConnections[Connection] = Connections
+        return Connections
+    end
+end
+
+-- Metatable & Caller Checks
+local getrawmetatable = getrawmetatable or function()
+    return setmetatable({}, {});
+end
+
+local getnamecallmethod = getnamecallmethod or function()
+    return ""
+end
+
+local checkcaller = checkcaller or function()
+    return false
+end
+
+-- Zayn Default Hooks Configuration
+local Hooks = {
+    AntiKick = false,
+    AntiTeleport = false,
+    NoJumpCooldown = false,
+}
+
+local mt = getrawmetatable(game);
+local OldMetaMethods = {}
+setreadonly(mt, false);
+for i, v in next, mt do
+    OldMetaMethods[i] = v
+end
+setreadonly(mt, true);
+local MetaMethodHooks = {}
+
+-- Zayn Instance Protection System
+local ProtectInstance, SpoofInstance, SpoofProperty;
+local pInstanceCount = {0, 0}; -- instancecount, primitivescount
+local ProtectedInstances = setmetatable({}, {
+    __mode = "v"
+});
+local FocusedTextBox = nil
+
+do
+    local SpoofedInstances = setmetatable({}, {
+        __mode = "v"
+    });
+    local SpoofedProperties = {}
+    Hooks.SpoofedProperties = SpoofedProperties
+
+    local otherCheck = function(instance, n)
+        if (IsA(instance, "ImageLabel") or IsA(instance, "ImageButton")) then
+            ProtectedInstances[#ProtectedInstances + 1] = instance
+            return;
+        end
+
+        if (IsA(instance, "BasePart")) then
+            pInstanceCount[2] = math.max(pInstanceCount[2] + (n or 1), 0);
+        end
+    end
+
+    -- Core Protection Function (Strict Zayn Identity)
+    ProtectInstance = function(Instance_)
+        if (not Tfind(ProtectedInstances, Instance_)) then
+            ProtectedInstances[#ProtectedInstances + 1] = Instance_
+            local descendants = Instance_:GetDescendants();
+            pInstanceCount[1] = pInstanceCount[1] + 1 + #descendants;
+            for i = 1, #descendants do
+                otherCheck(descendants[i]);
+            end
+            local dAdded = Instance_.DescendantAdded:Connect(function(descendant)
+                pInstanceCount[1] = pInstanceCount[1] + 1
+                otherCheck(descendant);
+            end);
+            local dRemoving = Instance_.DescendantRemoving:Connect(function(descendant)
+                pInstanceCount[1] = math.max(pInstanceCount[1] - 1, 0);
+                otherCheck(descendant, -1);
+            end);
+            otherCheck(Instance_);
+
+            -- Randomizing Name for Security
+            Instance_.Name = sub(gsub(GenerateGUID(Services.HttpService, false), '-', ''), 1, random(25, 30));
+            Instance_.Archivable = false
+        end
+    end
+end
+-- [[ ZAYN HUB - NAMECALL HOOKS & INSTANCE SPOOFING ]] --
+
+    -- Zayn Instance Spoofing System
+    SpoofInstance = function(Instance_, Instance2)
+        if (not SpoofedInstances[Instance_]) then
+            -- Creates a fake copy to trick the game's detection
+            SpoofedInstances[Instance_] = Instance2 and Instance2 or Clone(Instance_);
+        end
+    end
+
+    UnSpoofInstance = function(Instance_)
+        if (SpoofedInstances[Instance_]) then
+            SpoofedInstances[Instance_] = nil
+        end
+    end
+    
+    local ChangedSpoofedProperties = {}
+    
+    -- Zayn Property Spoofing (Tricks the game into reading fake values)
+    SpoofProperty = function(Instance_, Property, NoClone)
+        if (SpoofedProperties[Instance_]) then
+            local SpoofedPropertiesForInstance = SpoofedProperties[Instance_]
+            local Properties = map(SpoofedPropertiesForInstance, function(i, v)
+                return v.Property
+            end)
+            if (not Tfind(Properties, Property)) then
+                SpoofedProperties[Instance_][#SpoofedPropertiesForInstance + 1] = {
+                    SpoofedProperty = SpoofedPropertiesForInstance[1].SpoofedProperty,
+                    Property = Property,
+                };
+            end
+        else
+            local Cloned;
+            if (not NoClone and IsA(Instance_, "Instance") and not Services[tostring(Instance_)] and Instance_.Archivable) then
+                local Success, Ret = pcall(Clone, Instance_);
+                if (Success) then
+                    Cloned = Ret
+                end
+            end
+            SpoofedProperties[Instance_] = {{
+                SpoofedProperty = Cloned and Cloned or {[Property]=Instance_[Property]},
+                Property = Property,
+            }}
+            ChangedSpoofedProperties[Instance_] = {}
+        end
+    end
+
+    local GetAllParents = function(Instance_, NIV)
+        if (typeof(Instance_) == "Instance") then
+            local Parents = {}
+            local Current = NIV or Instance_
+            if (NIV) then
+                Parents[#Parents + 1] = Current
+            end
+            repeat
+                local Parent = Current.Parent
+                Parents[#Parents + 1] = Parent
+                Current = Parent
+            until not Current
+            return Parents
+        end
+        return {}
+    end
+
+    local Methods = {
+        "FindFirstChild",
+        "FindFirstChildWhichIsA",
+        "FindFirstChildOfClass",
+        "IsA"
+    }
+
+    local lockedInstances = {};
+    setmetatable(lockedInstances, { __mode = "k" });
+    
+    -- Zayn Protection Check (Hides Zayn Hub from Game Scripts)
+    local isProtected = function(instance)
+        if (lockedInstances[instance]) then
+            return true;
+        end
+
+        local good2 = pcall(tostring, instance);
+        if (not good2) then
+            lockedInstances[instance] = true
+            return true;
+        end
+
+        for i2 = 1, #ProtectedInstances do
+            local pInstance = ProtectedInstances[i2]
+            if (pInstance == instance) then
+                return true;
+            end
+        end
+        return false;
+    end
+
+    -- THE CORE HOOK: Zayn Namecall Interceptor
+    MetaMethodHooks.Namecall = function(...)
+        local __Namecall = OldMetaMethods.__namecall;
+        local Args = {...}
+        local self = Args[1]
+        local Method = getnamecallmethod() or "";
+
+        if (Method ~= "") then
+            local Success, result = pcall(OldMetaMethods.__index, self, Method);
+            if (not Success or Success and type(result) ~= "function") then
+                return __Namecall(...);
+            end
+        end
+
+        -- Zayn Anti-Kick System
+        if (Hooks.AntiKick and lower(Method) == "kick") then
+            local Player, Message = self, Args[2]
+            if (Hooks.AntiKick and Player == LocalPlayer) then
+                local Notify = Utils.Notify
+                local Context;
+                if (setthreadidentity) then
+                    Context = getthreadidentity();
+                    setthreadidentity(3);
+                end
+                if (Notify and Context) then
+                    Notify(nil, "ZAYN HUB: Kick Blocked", format("Game tried to kick you: %s", (Message and type(Message) == 'number' or type(Message) == 'string') and Message or "No reason"));
+                    setthreadidentity(Context);
+                end
+                return
+            end
+        end
+
+        -- Zayn Anti-Teleport System
+        if (Hooks.AntiTeleport and (Method == "Teleport" or Method == "TeleportToPlaceInstance")) then
+            local Player, PlaceId = self, Args[2]
+            if (Hooks.AntiTeleport and Player == LocalPlayer) then
+                local Notify = Utils.Notify
+                local Context;
+                if (setthreadidentity) then
+                    Context = getthreadidentity();
+                    setthreadidentity(3);
+                end
+                if (Notify and Context) then
+                    Notify(nil, "ZAYN HUB: Teleport Blocked", format("Game tried to move you to: %s", PlaceId or "Unknown"));
+                    setthreadidentity(Context);
+                end
+                return
+            end
+        end
+
+        if (checkcaller()) then
+            return __Namecall(...);
+        end
+
+        -- Hiding Zayn Hub Instances from Game Methods
+        if (Tfind(Methods, Method)) then
+            local ReturnedInstance = __Namecall(...);
+            if (Tfind(ProtectedInstances, ReturnedInstance)) then
+                return Method == "IsA" and false or nil
+            end
+        end
+
+        -- Optimized Hooking for Zayn Hub v1
+        if (Method == "children" or Method == "GetChildren" or Method ==  "getChildren" or Method == "GetDescendants" or Method == "getDescendants") then
+            return filter(__Namecall(...), function(i, instance)
+                return not isProtected(instance);
+            end);
+        end
+
+        -- Secure TextBox Handling
+        if (self == Services.UserInputService and (Method == "GetFocusedTextBox" or Method == "getFocusedTextBox")) then
+            local focused = __Namecall(...);
+            if (focused) then
+                for i = 1, #ProtectedInstances do
+                    local ProtectedInstance = ProtectedInstances[i]
+                    local iden = getthreadidentity();
+                    setthreadidentity(7);
+                    local pInstance = Tfind(ProtectedInstances, focused) or focused.IsDescendantOf(focused, ProtectedInstance);
+                    setthreadidentity(iden);
+                    if (pInstance) then
+                        return nil;
+                    end
+                end
+            end
+            return focused;
+        end
+
+        return __Namecall(...);
+    end
+-- [[ ZAYN HUB - NEWINDEX & FINALIZATION ]] --
+
+    MetaMethodHooks.NewIndex = function(...)
+        local __NewIndex = OldMetaMethods.__newindex;
+        if (checkcaller()) then
+            return __NewIndex(...);
+        end
+        
+        local Instance_, Index, Value = ...
+        local SanitisedIndex = Index
+        if (typeof(Instance_) == 'Instance' and type(Index) == 'string') then
+            SanitisedIndex = gsub(sub(Index, 0, 100), "%z.*", "");
+        end
+
+        -- Zayn Property Protection: Game ko value change karne se rokna
+        local SpoofedPropertiesForInstance = SpoofedProperties[Instance_]
+        if (SpoofedPropertiesForInstance) then
+            for i, SpoofedProperty in next, SpoofedPropertiesForInstance do
+                local SanitisedIndexCap = gsub(SanitisedIndex, "^%l", upper);
+                if (SanitisedIndexCap == SpoofedProperty.Property) then
+                    -- Zayn Logic: Agar game value badle, toh hum fake copy update karenge, real nahi
+                    ChangedSpoofedProperties[Instance_][SanitisedIndexCap] = {
+                        Caller = true,
+                        Value = Value
+                    }
+                    return __NewIndex(SpoofedProperty.SpoofedProperty, Index, Value);
+                end
+            end
+        end
+
+        -- Zayn Anti-Kick/Teleport Protection (Strict Mode)
+        if (Hooks.AntiKick and lower(SanitisedIndex) == "parent" and Instance_ == LocalPlayer) then
+            return -- Game cannot remove you from the player list
+        end
+
+        return __NewIndex(...);
+    end
+
+-- [[ INTEGRATION: METATABLE LOCK ]] --
+setreadonly(mt, false);
+mt.__namecall = newcclosure(MetaMethodHooks.Namecall);
+mt.__index = newcclosure(MetaMethodHooks.Index);
+mt.__newindex = newcclosure(MetaMethodHooks.NewIndex);
+setreadonly(mt, true);
+
+print("⚡ Zayn Private Hub: All Hooks & Protection Active ⚡")
+-- [[ ZAYN HUB - ADVANCED NEWINDEX & DESTROY HOOKS ]] --
+
+MetaMethodHooks.NewIndex = function(...) 
+    local __NewIndex = OldMetaMethods.__newindex; 
+    local __Index = OldMetaMethods.__index; 
+    local Instance_, Index, Value = ... 
+    
+    local SpoofedInstance = SpoofedInstances[Instance_] 
+    local SpoofedPropertiesForInstance = SpoofedProperties[Instance_] 
+    
+    if (checkcaller()) then 
+        if (Index == "Parent" and Value) then 
+            local ProtectedInstance 
+            for i = 1, #ProtectedInstances do 
+                local ProtectedInstance_ = ProtectedInstances[i] 
+                if (Instance_ == ProtectedInstance_ or Instance_.IsDescendantOf(Value, ProtectedInstance_)) then 
+                    ProtectedInstance = true 
+                end 
+            end 
+            
+            if (ProtectedInstance) then 
+                local Parents = GetAllParents(Instance_, Value); 
+                local child1 = getconnections(Parents[1].ChildAdded, true); 
+                local descendantconnections = {} 
+                
+                for i, v in next, child1 do v.Disable(v); end 
+                for i = 1, #Parents do 
+                    local Parent = Parents[i] 
+                    for i2, v in next, getconnections(Parent.DescendantAdded, true) do 
+                        v.Disable(v); 
+                        descendantconnections[#descendantconnections + 1] = v 
+                    end 
+                end 
+                
+                local good, Ret = pcall(__NewIndex, ...); 
+                
+                for i, v in pairs(descendantconnections) do v:Enable(); end 
+                for i, v in next, child1 do v.Enable(v); end 
+                
+                if (not good) then return __NewIndex(...); end 
+                return Ret; 
+            end 
+        end 
+        
+        if (SpoofedInstance or SpoofedPropertiesForInstance) then 
+            if (SpoofedPropertiesForInstance) then 
+                ChangedSpoofedProperties[Instance_][Index] = { 
+                    Caller = true, 
+                    BeforeValue = Instance_[Index], 
+                    Value = Value 
+                } 
+            end 
+            
+            local Connections = tbl_concat( 
+                getconnections(game.ItemChanged, true) 
+            ) 
+            
+            if (not next(Connections)) then return __NewIndex(Instance_, Index, Value); end 
+            for i, v in next, Connections do v.Disable(v); end 
+            local Ret = __NewIndex(Instance_, Index, Value); 
+            for i, v in next, Connections do v.Enable(v); end 
+            return Ret 
+        end 
+        return __NewIndex(...); 
+    end 
+
+    local SanitisedIndex = Index 
+    if (typeof(Instance_) == 'Instance' and type(Index) == 'string') then 
+        local len = select(2, gsub(Index, "%z", "")); 
+        if (len > 255) then return __Index(...); end 
+        SanitisedIndex = gsub(sub(Index, 0, 100), "%z.*", ""); 
+    end 
+
+    if (SpoofedInstance) then 
+        if (Tfind(AllowedNewIndexes, SanitisedIndex)) then return __NewIndex(...); end 
+        return __NewIndex(SpoofedInstance, Index, __Index(SpoofedInstance, Index)); 
+    end 
+
+    if (SpoofedPropertiesForInstance) then 
+        for i, SpoofedProperty in next, SpoofedPropertiesForInstance do 
+            if (SpoofedProperty.Property == SanitisedIndex and not Tfind(AllowedIndexes, SanitisedIndex)) then 
+                ChangedSpoofedProperties[Instance_][SanitisedIndex] = { 
+                    Caller = false, 
+                    BeforeValue = Instance_[Index], 
+                    Value = Value 
+                } 
+                return __NewIndex(SpoofedProperty.SpoofedProperty, Index, Value); 
+            end 
+        end 
+    end 
+    
+    return __NewIndex(...); 
+end 
+
+local hookmetamethod = hookmetamethod or function(metatable, metamethod, func) 
+    setreadonly(metatable, false); 
+    local Old = hookfunction(metatable[metamethod], func, true); 
+    setreadonly(metatable, true); 
+    return Old 
+end 
+
+OldMetaMethods.__index = hookmetamethod(game, "__index", MetaMethodHooks.Index); 
+OldMetaMethods.__newindex = hookmetamethod(game, "__newindex", MetaMethodHooks.NewIndex); 
+OldMetaMethods.__namecall = hookmetamethod(game, "__namecall", MetaMethodHooks.Namecall); 
+
+Hooks.Destroy = hookfunction(game.Destroy, function(...) 
+    local instance = ... 
+    local protected = table.find(ProtectedInstances, instance); 
+    
+    if (checkcaller() and protected) then 
+        otherCheck(instance, -1); 
+        local Parents = GetAllParents(instance); 
+        
+        for i, v in next, getconnections(Parents[1].ChildRemoved, true) do v.Disable(v); end 
+        for i = 1, #Parents do 
+            local Parent = Parents[i] 
+            for i2, v in next, getconnections(Parent.DescendantRemoving, true) do v.Disable(v); end 
+        end 
+        
+        local destroy = Hooks.Destroy(...); 
+        
+        for i = 1, #Parents do 
+            local Parent = Parents[i] 
+            for i2, v in next, getconnections(Parent.DescendantRemoving, true) do v.Enable(v); end 
+        end 
+        for i, v in next, getconnections(Parents[1].ChildRemoved, true) do v.Enable(v); end 
+        
+        table.remove(ProtectedInstances, protected); 
+        return destroy; 
+    end 
+    return Hooks.Destroy(...); 
+end);
+-- [[ ZAYN HUB - PLAYER LOGIC & CONFIGURATION ]] --
+
+local GetRoot = function(Plr, Char)
+    local LCharacter = GetCharacter();
+    local Character = Char or GetCharacter(Plr);
+    return Plr and Character and (FindFirstChild(Character, "HumanoidRootPart") or FindFirstChild(Character, "Torso") or FindFirstChild(Character, "UpperTorso")) or LCharacter and (FindFirstChild(LCharacter, "HumanoidRootPart") or FindFirstChild(LCharacter, "Torso") or FindFirstChild(LCharacter, "UpperTorso"));
+end
+
+local GetHumanoid = function(Plr, Char)
+    local LCharacter = GetCharacter();
+    local Character = Char or GetCharacter(Plr);
+    return Plr and Character and FindFirstChildWhichIsA(Character, "Humanoid") or LCharacter and FindFirstChildWhichIsA(LCharacter, "Humanoid");
+end
+
+local GetMagnitude = function(Plr, Char)
+    local LRoot = GetRoot();
+    local Root = GetRoot(Plr, Char);
+    return (Plr and Root and LRoot) and (Root.Position - LRoot.Position).magnitude or math.huge
+end
+
+-- Zayn Hub Default Settings
+local Settings = {
+    Prefix = "!",
+    CommandBarPrefix = "Semicolon",
+    ChatPrediction = false,
+    Macros = {},
+    Aliases = {},
+}
+local PluginSettings = {
+    PluginsEnabled = true,
+    PluginDebug = false,
+    DisabledPlugins = {
+        ["PluginName"] = true
+    },
+    SafePlugins = false
+}
+
+-- Zayn Hub Folder & Config Management
+local WriteConfig = function(Destroy)
+    local JSON = JSONEncode(Services.HttpService, Settings);
+    local PluginJSON = JSONEncode(Services.HttpService, PluginSettings);
+    
+    -- Updated folder name to Zayn Hub
+    if (isfolder("zayn-hub") and Destroy) then
+        delfolder("zayn-hub");
+    end
+    
+    if (not isfolder("zayn-hub")) then
+        makefolder("zayn-hub");
+        makefolder("zayn-hub/plugins");
+        makefolder("zayn-hub/chatlogs");
+    end
+    
+    writefile("zayn-hub/config.json", JSON);
+    writefile("zayn-hub/plugins/plugin-conf.json", PluginJSON);
+end
+
+local GetConfig = function()
+    if (isfolder("zayn-hub") and isfile("zayn-hub/config.json")) then
+        return JSONDecode(Services.HttpService, readfile("zayn-hub/config.json"));
+    else
+        WriteConfig();
+        return JSONDecode(Services.HttpService, readfile("zayn-hub/config.json"));
+    end
+end
+
+local GetPluginConfig = function()
+    if (isfolder("zayn-hub") and isfolder("zayn-hub/plugins") and isfile("zayn-hub/plugins/plugin-conf.json")) then
+        return JSONDecode(Services.HttpService, readfile("zayn-hub/plugins/plugin-conf.json"));
+    else
+        WriteConfig();
+        return JSONDecode(Services.HttpService, readfile("zayn-hub/plugins/plugin-conf.json"));
+    end
+end
+
+-- Config Setters
+local SetPluginConfig = function(conf)
+    local NewConfig = GetPluginConfig();
+    for i, v in next, conf do NewConfig[i] = v end
+    writefile("zayn-hub/plugins/plugin-conf.json", JSONEncode(Services.HttpService, NewConfig));
+end
+
+local SetConfig = function(conf)
+    local NewConfig = GetConfig();
+    for i, v in next, conf do NewConfig[i] = v end
+    writefile("zayn-hub/config.json", JSONEncode(Services.HttpService, NewConfig));
+end
+
+-- Zayn Hub Runtime Data
+local CurrentConfig = GetConfig();
+local Prefix = CurrentConfig.Prefix or "!"
+local Macros = CurrentConfig.Macros or {}
+local AdminUsers = AdminUsers or {}
+local Exceptions = Exceptions or {}
+local Connections = { Players = {} }
+
+_L.CLI = false
+_L.ChatLogsEnabled = true
+_L.HttpLogsEnabled = true
+
+-- Zayn Hub Advanced Player Finder
+local GetPlayer;
+GetPlayer = function(str, noerror)
+    local CurrentPlayers = filter(GetPlayers(Players), function(i, v)
+        return not Tfind(Exceptions, v);
+    end)
+    
+    if (not str) then return {} end
+    str = lower(trim(str));
+    
+    -- Multi-target support (e.g. !kill me,others)
+    if (Sfind(str, ",")) then
+        return flatMap(split(str, ","), function(i, v)
+            return GetPlayer(v, noerror);
+        end)
+    end
+
+    local Magnitudes = map(CurrentPlayers, function(i, v)
+        local Root = GetRoot(v)
+        return {v, Root and (Root.CFrame.p - GetRoot().CFrame.p).Magnitude or math.huge}
+    end)
+
+    -- Zayn Target Arguments
+    local PlayerArgs = {
+        ["all"] = function()
+            return filter(CurrentPlayers, function(i, v) return v ~= LocalPlayer end)
+        end,
+        ["others"] = function()
+            return filter(CurrentPlayers, function(i, v) return v ~= LocalPlayer end)
+        end,
+        ["nearest"] = function()
+            sort(Magnitudes, function(a, b) return a[2] < b[2] end)
+            return {Magnitudes[2] and Magnitudes[2][1] or nil}
+        end,
+        ["farthest"] = function()
+            sort(Magnitudes, function(a, b) return a[2] > b[2] end)
+            return {Magnitudes[#Magnitudes] and Magnitudes[#Magnitudes][1] or nil}
+        end,
+        ["random"] = function()
+            return {#CurrentPlayers > 1 and {CurrentPlayers[random(2, #CurrentPlayers)]} or {}}
+        end,
+        ["me"] = function() return {LocalPlayer} end,
+        ["npcs"] = function()
+            local NPCs = {}
+            local Descendants = GetDescendants(Workspace);
+            for i = 1, #Descendants do
+                local D = Descendants[i]
+                if (IsA(D, "Humanoid") and IsA(D.Parent, "Model") and Players:GetPlayerFromCharacter(D.Parent) == nil) then
+                    local FakePlr = InstanceNew("Player");
+                    FakePlr.Character = D.Parent
+                    FakePlr.Name = D.Parent.Name
+                    NPCs[#NPCs + 1] = FakePlr
+                end
+            end
+            return NPCs
+        end
+    }
+
+    if (PlayerArgs[str]) then return PlayerArgs[str](); end
+
+    -- Name and DisplayName matching
+    local Matched = filter(CurrentPlayers, function(i, v)
+        return (sub(lower(v.Name), 1, #str) == str) or (sub(lower(v.DisplayName), 1, #str) == str);
+    end)
+
+    if (not next(Matched) and not noerror) then
+        -- Updated Notification Credit
+        Utils.Notify(LocalPlayer, "ZAYN HUB", "Player not found: " .. str);
+    end
+    return Matched
+end
+
+local AddConnection = function(Connection, CEnv, TblOnly)
+    if (CEnv) then
+        CEnv[#CEnv + 1] = Connection
+        if (TblOnly) then return Connection end
+    end
+    Connections[#Connections + 1] = Connection
+    return Connection
+end
+-- [[ ZAYN HUB - UI & THEME MANAGEMENT ]] --
+
+local LastCommand = {}
+
+-- [[ ZAYN UI PROTECTION ]] --
+Guis = {}
+ParentGui = function(Gui, Parent)
+    -- Randomizing name to prevent detection from game scripts
+    Gui.Name = sub(gsub(Services.HttpService:GenerateGUID(false), '-', ''), 1, random(25, 30))
+    ProtectInstance(Gui);
+    if (syn and syn.protect_gui) then syn.protect_gui(Gui); end
+    Gui.Parent = Parent or Services.CoreGui
+    Guis[#Guis + 1] = Gui
+    return Gui
+end
+
+-- Loading UI Asset (Zayn Custom Framework)
+local UI = Clone(Services.InsertService:LoadLocalAsset("rbxassetid://7882275026"));
+UI.Enabled = true
+
+local CommandBarPrefix;
+
+local ConfigUI = UI.Config
+local ConfigElements = ConfigUI.GuiElements
+local CommandBar = UI.CommandBar
+local Commands = UI.Commands
+local ChatLogs = UI.ChatLogs
+local Console = UI.Console
+local GlobalChatLogs = Clone(UI.ChatLogs);
+local HttpLogs = Clone(UI.ChatLogs);
+local Notification = UI.Notification
+local Command = UI.Command
+local ChatLogMessage = UI.Message
+local GlobalChatLogMessage = Clone(UI.Message);
+local NotificationBar = UI.NotificationBar
+
+CommandBarOpen = false
+CommandBarTransparencyClone = Clone(CommandBar);
+ChatLogsTransparencyClone = Clone(ChatLogs);
+ConsoleTransparencyClone = Clone(Console);
+GlobalChatLogsTransparencyClone = Clone(GlobalChatLogs);
+HttpLogsTransparencyClone = Clone(HttpLogs);
+ConfigUIClone = Clone(ConfigUI);
+PredictionText = ""
+
+do
+    local UIParent = CommandBar.Parent
+    GlobalChatLogs.Parent = UIParent
+    GlobalChatLogMessage.Parent = UIParent
+    GlobalChatLogs.Name = "ZaynGlobalLogs"
+    GlobalChatLogMessage.Name = "ZaynGlobalMessage"
+
+    HttpLogs.Parent = UIParent
+    HttpLogs.Name = "ZaynHttpLogs"
+    HttpLogs.Size = UDim2.new(0, 421, 0, 260);
+    HttpLogs.Search.PlaceholderText = "Search Logs..."
+end
+
+-- Positioning CommandBar (Zayn Style)
+CommandBar.Position = UDim2.new(0.5, -100, 1, 5);
+
+-- [[ ZAYN THEME ENGINE ]] --
+local UITheme, Values;
+do
+    local BaseBGColor = Color3.fromRGB(32, 33, 36); -- Zayn Dark Mode
+    local BaseTransparency = 0.25
+    local BaseTextColor = Color3.fromRGB(220, 224, 234);
+    local BaseValues = { BackgroundColor = BaseBGColor, Transparency = BaseTransparency, TextColor = BaseTextColor }
+    
+    Values = { 
+        Background = clone(BaseValues), 
+        CommandBar = clone(BaseValues), 
+        CommandList = clone(BaseValues), 
+        Notification = clone(BaseValues), 
+        ChatLogs = clone(BaseValues), 
+        Config = clone(BaseValues) 
+    }
+
+    local Objects = keys(Values);
+    local GetBaseMT = function(Object)
+        return setmetatable({}, {
+            __newindex = function(self, Index, Value)
+                local valType = typeof(Value);
+                if (Index == "BackgroundColor") then
+                    if (Value == "Reset") then
+                        Value = BaseBGColor
+                        valType = "Color3"
+                    end
+                    assert(valType == 'Color3', format("Zayn UI Error: Color3 expected, got %s", valType));
+                    
+                    if (Object == "Background") then
+                        CommandBar.BackgroundColor3 = Value
+                        Notification.BackgroundColor3 = Value
+                        Command.BackgroundColor3 = Value
+                        ChatLogs.BackgroundColor3 = Value
+                        ChatLogs.Frame.BackgroundColor3 = Value
+                        Console.BackgroundColor3 = Value
+                        Console.Frame.BackgroundColor3 = Value
+                        HttpLogs.BackgroundColor3 = Value
+                        HttpLogs.Frame.BackgroundColor3 = Value
+                        UI.ToolTip.BackgroundColor3 = Value
+                        ConfigUI.BackgroundColor3 = Value
+                        ConfigUI.Container.BackgroundColor3 = Value
+                        Commands.BackgroundColor3 = Value
+                        Commands.Frame.BackgroundColor3 = Value
+                        
+                        -- Updating all children colors
+                        local function updateChildren(parent)
+                            for _, child in next, parent:GetChildren() do
+                                if child:IsA("GuiObject") then child.BackgroundColor3 = Value end
+                            end
+                        end
+                        updateChildren(UI.NotificationBar)
+                        updateChildren(Commands.Frame.List)
+
+                        for i, v in next, Values do
+                            Values[i].BackgroundColor = Value
+                        end
+                    elseif (Object == "CommandBar") then
+                        CommandBar.BackgroundColor3 = Value
+                    elseif (Object == "Notification") then
+                        Notification.BackgroundColor3 = Value
+                    elseif (Object == "Config") then
+                        ConfigUI.BackgroundColor3 = Value
+                        ConfigUI.Container.BackgroundColor3 = Value
+                    end
+                    Values[Object][Index] = Value
+                end
+            end
+        })
+    end
+end
+-- [[ ZAYN HUB - TEXT & TRANSPARENCY THEME ENGINE ]] --
+
+                    -- Text Color Logic (Professional Zayn Look)
+                    assert(type == 'Color3', format("Zayn UI Error: Color3 expected, got %s", type));
+                    
+                    if (Object == "Notification") then
+                        Notification.Title.TextColor3 = Value
+                        Notification.Message.TextColor3 = Value
+                        Notification.Close.TextColor3 = Value
+                    elseif (Object == "CommandBar") then
+                        CommandBar.Input.TextColor3 = Value
+                        CommandBar.Arrow.TextColor3 = Value
+                    elseif (Object == "CommandList") then
+                        Command.CommandText.TextColor3 = Value
+                        local Descendants = GetDescendants(Commands);
+                        for i = 1, #Descendants do
+                            local Descendant = Descendants[i]
+                            if (IsA(Descendant, "TextBox") or IsA(Descendant, "TextLabel") or IsA(Descendant, "TextButton")) then
+                                Descendant.TextColor3 = Value
+                            end
+                        end
+                    elseif (Object == "ChatLogs") then
+                        UI.Message.TextColor3 = Value
+                    elseif (Object == "Config") then
+                        local Descendants = GetDescendants(ConfigUI);
+                        for i = 1, #Descendants do
+                            local Descendant = Descendants[i]
+                            if (IsA(Descendant, "TextBox") or IsA(Descendant, "TextLabel") or IsA(Descendant, "TextButton")) then
+                                Descendant.TextColor3 = Value
+                            end
+                        end
+                    elseif (Object == "Background") then
+                        -- Global Text Color Update for Zayn Hub
+                        Notification.Title.TextColor3 = Value
+                        Notification.Message.TextColor3 = Value
+                        Notification.Close.TextColor3 = Value
+                        CommandBar.Input.TextColor3 = Value
+                        CommandBar.Arrow.TextColor3 = Value
+                        Command.CommandText.TextColor3 = Value
+                        UI.Message.TextColor3 = Value
+                        
+                        local function updateGlobalText(parent)
+                            for _, desc in next, parent:GetDescendants() do
+                                if (IsA(desc, "TextBox") or IsA(desc, "TextLabel") or IsA(desc, "TextButton")) then
+                                    desc.TextColor3 = Value
+                                end
+                            end
+                        end
+                        updateGlobalText(ConfigUI)
+                        updateGlobalText(Commands)
+
+                        for i, v in next, Values do
+                            Values[i].TextColor = Value
+                        end
+                    end
+                    Values[Object][Index] = Value
+                    
+                elseif (Index == "Transparency") then
+                    if (Value == "Reset") then
+                        Value = BaseTransparency
+                        type = "number"
+                    end
+                    
+                    -- FIXED: Assert now correctly expects a number
+                    assert(type == 'number', format("Zayn UI Error: number expected, got %s", type));
+                    
+                    if (Object == "Background") then
+                        CommandBar.Transparency = Value
+                        Notification.Transparency = Value
+                        Command.Transparency = Value + .5
+                        ChatLogs.Transparency = Value
+                        ChatLogs.Frame.Transparency = Value
+                        HttpLogs.Transparency = Value
+                        HttpLogs.Frame.Transparency = Value
+                        UI.ToolTip.Transparency = Value
+                        ConfigUI.Transparency = Value
+                        ConfigUI.Container.Transparency = Value + .5
+                        Commands.Transparency = Value
+                        Commands.Frame.Transparency = Value + .5
+                    elseif (Object == "Notification") then
+                        Notification.Transparency = Value
+                        for _, child in next, UI.NotificationBar:GetChildren() do
+                            if (IsA(child, "GuiObject")) then
+                                child.Transparency = Value
+                            end
+                        end
+                    end
+                    Values[Object][Index] = Value
+                end
+            end,
+            __index = function(self, Index)
+                return Values[Object][Index]
+            end
+        })
+    end
+    
+    -- Zayn Theme Entry Point
+    UITheme = setmetatable({}, {
+        __index = function(self, Index)
+            if (Tfind(Objects, Index)) then
+                local BaseMt = GetBaseMT(Index);
+                self[Index] = BaseMt
+                return BaseMt
+            end
+        end
+    })
+end
+-- [[ ZAYN HUB - CONFIG PERSISTENCE & UTILS ]] --
+
+local IsSupportedExploit = isfile and isfolder and writefile and readfile
+
+local GetThemeConfig
+local WriteThemeConfig = function(Conf)
+    if (IsSupportedExploit and isfolder("zayn-hub")) then
+        local ToHSV = Color3.new().ToHSV
+        -- Zayn Logic: Deep search and convert Color3 objects for JSON compatibility
+        local ValuesToEncode = deepsearchset(Values, function(i, v)
+            return typeof(v) == 'Color3'
+        end, function(i, v)
+            local H, S, V = ToHSV(v);
+            return {H, S, V, "Color3"}
+        end)
+        local Data = JSONEncode(Services.HttpService, ValuesToEncode);
+        writefile("zayn-hub/Theme.json", Data);
+    end
+end
+
+GetThemeConfig = function()
+    if (IsSupportedExploit and isfolder("zayn-hub")) then
+        if (isfile("zayn-hub/Theme.json")) then
+            local Success, Data = pcall(JSONDecode, Services.HttpService, readfile("zayn-hub/Theme.json"));
+            if (not Success or type(Data) ~= 'table') then
+                WriteThemeConfig();
+                return Values
+            end
+            -- Zayn Logic: Restore Color3 objects from HSV arrays
+            local DecodedData = deepsearchset(Data, function(i, v)
+                return type(v) == 'table' and #v == 4 and v[4] == "Color3"
+            end, function(i,v)
+                return Color3.fromHSV(v[1], v[2], v[3]);
+            end)
+            return DecodedData            
+        else
+            WriteThemeConfig();
+            return Values
+        end
+    else
+        return Values
+    end
+end
+
+local LoadTheme;
+do
+    local Config = GetConfig();
+    -- Zayn Prefix Binding
+    CommandBarPrefix = isfolder and (Config.CommandBarPrefix and Enum.KeyCode[Config.CommandBarPrefix] or Enum.KeyCode.Semicolon) or Enum.KeyCode.Semicolon
+
+    local Theme = GetThemeConfig();
+    LoadTheme = function(Theme)
+        -- Zayn Hub Global UI Loading
+        UITheme.Background.BackgroundColor = Theme.Background.BackgroundColor
+        UITheme.Background.Transparency = Theme.Background.Transparency
+
+        UITheme.ChatLogs.BackgroundColor = Theme.ChatLogs.BackgroundColor
+        UITheme.CommandBar.BackgroundColor = Theme.CommandBar.BackgroundColor
+        UITheme.Config.BackgroundColor = Theme.Config.BackgroundColor
+        UITheme.Notification.BackgroundColor = Theme.Notification.BackgroundColor
+        UITheme.CommandList.BackgroundColor = Theme.Notification.BackgroundColor
+        
+        UITheme.ChatLogs.TextColor = Theme.ChatLogs.TextColor
+        UITheme.CommandBar.TextColor = Theme.CommandBar.TextColor
+        UITheme.Config.TextColor = Theme.Config.TextColor
+        UITheme.Notification.TextColor = Theme.Notification.TextColor
+        UITheme.CommandList.TextColor = Theme.Notification.TextColor
+
+        UITheme.ChatLogs.Transparency = Theme.ChatLogs.Transparency
+        UITheme.CommandBar.Transparency = Theme.CommandBar.Transparency
+        UITheme.Config.Transparency = Theme.Config.Transparency
+        UITheme.Notification.Transparency = Theme.Notification.Transparency
+        UITheme.CommandList.Transparency = Theme.Notification.Transparency
+    end
+    LoadTheme(Theme);
+end
+
+-- [[ ZAYN TWEEN & COLOR UTILITIES ]] --
+
+Utils.Tween = function(Object, Style, Direction, Time, Goal)
+    local TweenService = Services.TweenService
+    local TInfo = TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction])
+    local Tween = TweenService.Create(TweenService, Object, TInfo, Goal)
+
+    Tween.Play(Tween)
+    return Tween
+end
+
+Utils.MultColor3 = function(Color, Delta)
+    local clamp = math.clamp
+    -- Zayn Highlight/Darken Utility
+    return Color3.new(clamp(Color.R * Delta, 0, 1), clamp(Color.G * Delta, 0, 1), clamp(Color.B * Delta, 0, 1));
+end
+-- [[ ZAYN HUB - INTERACTIVE UI UTILITIES ]] --
+
+-- Button Click Effects (Hover, Press, Release)
+Utils.Click = function(Object, Goal)
+    local Hover = {
+        [Goal] = Utils.MultColor3(Object[Goal], 0.9)
+    }
+
+    local Press = {
+        [Goal] = Utils.MultColor3(Object[Goal], 1.2)
+    }
+
+    local Origin = {
+        [Goal] = Object[Goal]
+    }
+
+    AddConnection(CConnect(Object.MouseEnter, function()
+        Utils.Tween(Object, "Sine", "Out", .5, Hover);
+    end));
+
+    AddConnection(CConnect(Object.MouseLeave, function()
+        Utils.Tween(Object, "Sine", "Out", .5, Origin);
+    end));
+
+    AddConnection(CConnect(Object.MouseButton1Down, function()
+        Utils.Tween(Object, "Sine", "Out", .3, Press);
+    end));
+
+    AddConnection(CConnect(Object.MouseButton1Up, function()
+        Utils.Tween(Object, "Sine", "Out", .4, Hover);
+    end));
+end
+
+-- Warning/Highlight Blink Effect
+Utils.Blink = function(Object, Goal, Color1, Color2)
+    local Normal = { [Goal] = Color1 }
+    local Blink = { [Goal] = Color2 }
+
+    local Tween = Utils.Tween(Object, "Sine", "Out", .5, Blink)
+    CWait(Tween.Completed);
+
+    Tween = Utils.Tween(Object, "Sine", "Out", .5, Normal)
+    CWait(Tween.Completed);
+end
+
+-- Simple Hover Effect
+Utils.Hover = function(Object, Goal)
+    local Hover = { [Goal] = Utils.MultColor3(Object[Goal], 0.9) }
+    local Origin = { [Goal] = Object[Goal] }
+
+    AddConnection(CConnect(Object.MouseEnter, function()
+        Utils.Tween(Object, "Sine", "Out", .5, Hover);
+    end));
+
+    AddConnection(CConnect(Object.MouseLeave, function()
+        Utils.Tween(Object, "Sine", "Out", .5, Origin);
+    end));
+end
+
+-- Zayn Hub Smooth Draggable Logic
+Utils.Draggable = function(Ui, DragUi)
+    local StartPos
+    local DragToggle, DragInput, DragStart
+
+    DragUi = DragUi or Ui
+    local TweenService = Services.TweenService
+
+    local function UpdateInput(Input)
+        local Delta = Input.Position - DragStart
+        local Position = UDim2.new(
+            StartPos.X.Scale, StartPos.X.Offset + Delta.X, 
+            StartPos.Y.Scale, StartPos.Y.Offset + Delta.Y
+        )
+
+        -- Smooth movement tween
+        Utils.Tween(Ui, "Linear", "Out", .1, {
+            Position = Position
+        });
+    end
+
+    -- Start dragging only if not typing in a box
+    AddConnection(CConnect(Ui.InputBegan, function(Input)
+        if ((Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch) and 
+            Services.UserInputService:GetFocusedTextBox() == nil) then
+            
+            DragToggle = true
+            DragStart = Input.Position
+            StartPos = Ui.Position
+
+            local Connection;
+            Connection = AddConnection(CConnect(Input.Changed, function()
+                if (Input.UserInputState == Enum.UserInputState.End) then
+                    DragToggle = false
+                    Connection:Disconnect() -- Clean up
+                end
+            end));
+        end
+    end));
+
+    AddConnection(CConnect(Ui.InputChanged, function(Input)
+        if (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch) then
+            DragInput = Input
+        end
+    end));
+
+    AddConnection(CConnect(Services.UserInputService.InputChanged, function(Input)
+        if (Input == DragInput and DragToggle) then
+            UpdateInput(Input)
+        end
+    end));
+end
+-- [[ ZAYN HUB - VISUAL & SCROLLING UTILITIES ]] --
+
+-- Smooth Scrolling Logic (Elttob Method Integrated)
+Utils.SmoothScroll = function(content, SmoothingFactor)
+    -- Disable original scrolling to apply Zayn Smooth Logic
+    content.ScrollingEnabled = false
+
+    -- Create invisible input frame to capture mouse wheel/touch
+    local input = Clone(content)
+    input:ClearAllChildren();
+    input.BackgroundTransparency = 1
+    input.ScrollBarImageTransparency = 1
+    input.ZIndex = content.ZIndex + 1
+    input.Name = "_ZaynSmoothInput"
+    input.ScrollingEnabled = true
+    input.Parent = content.Parent
+
+    -- Keep input frame in sync with Zayn Hub's content frame
+    local function syncProperty(prop)
+        AddConnection(CConnect(content:GetPropertyChangedSignal(prop), function()
+            if prop == "ZIndex" then
+                input[prop] = content[prop] + 1
+            else
+                input[prop] = content[prop]
+            end
+        end));
+    end
+
+    local properties = {
+        "CanvasSize", "Position", "Rotation", "ScrollingDirection", 
+        "ScrollBarThickness", "BorderSizePixel", "ElasticBehavior", 
+        "SizeConstraint", "ZIndex", "BorderColor3", "Size", 
+        "AnchorPoint", "Visible"
+    }
+
+    for _, prop in next, properties do syncProperty(prop) end
+
+    -- Interpolation logic for buttery smooth scrolling
+    local smoothConnection = AddConnection(CConnect(RenderStepped, function()
+        local a = content.CanvasPosition
+        local b = input.CanvasPosition
+        local c = SmoothingFactor or 0.1 -- Default Zayn smoothing
+        local d = (b - a) * c + a
+
+        content.CanvasPosition = d
+    end));
+
+    -- Cleanup when Zayn Hub UI is closed/destroyed
+    AddConnection(CConnect(content.AncestryChanged, function()
+        if content.Parent == nil then
+            input:Destroy();
+            smoothConnection:Disconnect();
+        end
+    end));
+end
+
+-- Tween all UI elements to a specific transparency (Fade In/Out)
+Utils.TweenAllTransToObject = function(Object, Time, BeforeObject)
+    local Descendants = GetDescendants(Object);
+    local OldDescentants = GetDescendants(BeforeObject);
+    local Tween
+
+    Tween = Utils.Tween(Object, "Sine", "Out", Time, {
+        BackgroundTransparency = BeforeObject.BackgroundTransparency
+    })
+
+    for i = 1, #Descendants do
+        local v = Descendants[i]
+        local Target = OldDescentants[i]
+        if not Target then continue end
+
+        if (IsA(v, "GuiObject")) then
+            local Goals = { BackgroundTransparency = Target.BackgroundTransparency }
+            
+            if (IsA(v, "TextLabel") or IsA(v, "TextButton") or IsA(v, "TextBox")) then
+                Goals.TextTransparency = Target.TextTransparency
+                Goals.TextStrokeTransparency = Target.TextStrokeTransparency
+            elseif (IsA(v, "ImageLabel") or IsA(v, "ImageButton")) then
+                Goals.ImageTransparency = Target.ImageTransparency
+            elseif (IsA(v, "ScrollingFrame")) then
+                Goals.ScrollBarImageTransparency = Target.ScrollBarImageTransparency
+            end
+            
+            Utils.Tween(v, "Sine", "Out", Time, Goals)
+        end
+    end
+
+    return Tween
+end
+
+-- Instantly hide all UI elements (Set Transparency to 1)
+Utils.SetAllTrans = function(Object)
+    Object.BackgroundTransparency = 1
+
+    local Descendants = GetDescendants(Object);
+    for i = 1, #Descendants do
+        local v = Descendants[i]
+        if (IsA(v, "GuiObject")) then
+            v.BackgroundTransparency = 1
+            if (IsA(v, "TextLabel") or IsA(v, "TextButton") or IsA(v, "TextBox")) then
+                v.TextTransparency = 1
+            elseif (IsA(v, "ImageLabel") or IsA(v, "ImageButton")) then
+                v.ImageTransparency = 1
+            elseif (IsA(v, "ScrollingFrame")) then
+                v.ScrollBarImageTransparency = 1
+            end
+        end
+    end
+end
+-- [[ ZAYN HUB - NOTIFICATION & SEARCH UTILITIES ]] --
+
+-- Smoothly fade out and destroy UI elements
+Utils.TweenAllTrans = function(Object, Time)
+    local Tween 
+    Tween = Utils.Tween(Object, "Sine", "Out", Time, { BackgroundTransparency = 1 })
+
+    local Descendants = GetDescendants(Object);
+    for i = 1, #Descendants do
+        local v = Descendants[i]
+        if (IsA(v, "GuiObject")) then
+            local Goals = { BackgroundTransparency = 1 }
+            if (IsA(v, "TextLabel") or IsA(v, "TextButton") or IsA(v, "TextBox")) then
+                Goals.TextTransparency = 1
+            elseif (IsA(v, "ImageLabel") or IsA(v, "ImageButton")) then
+                Goals.ImageTransparency = 1
+            elseif (IsA(v, "ScrollingFrame")) then
+                Goals.ScrollBarImageTransparency = 1
+            end
+            Utils.Tween(v, "Sine", "Out", Time, Goals)
+        end
+    end
+    return Tween
+end
+
+-- Calculate dynamic text height for notifications
+Utils.TextSize = function(Object)
+    local TextService = Services.TextService
+    return TextService:GetTextSize(Object.Text, Object.TextSize, Object.Font, Vector2.new(Object.AbsoluteSize.X, 1000)).Y
+end
+
+-- Zayn Hub Notification System
+Utils.Notify = function(Caller, Title, Message, Time)
+    if (not Caller or Caller == LocalPlayer) then
+        local Notification = UI.Notification
+        local NotificationBar = UI.NotificationBar
+        local Clone = Clone(Notification)
+
+        local function TweenDestroy()
+            if (Utils and Clone) then
+                local Tween = Utils.TweenAllTrans(Clone, .25)
+                CWait(Tween.Completed)
+                Destroy(Clone);
+            end
+        end
+
+        Clone.Message.Text = Message
+        Clone.Title.Text = Title or "ZAYN HUB" -- Zayn Default
+        Utils.SetAllTrans(Clone)
+        Utils.Click(Clone.Close, "TextColor3")
+        Clone.Visible = true
+        
+        -- Auto-adjust height based on message length
+        local NewHeight = Utils.TextSize(Clone.Message) + Clone.Size.Y.Offset - Clone.Message.TextSize
+        Clone.Size = UDim2.fromOffset(Clone.Size.X.Offset, NewHeight);
+        Clone.Parent = NotificationBar
+
+        coroutine.wrap(function()
+            local Tween = Utils.TweenAllTransToObject(Clone, .5, Notification)
+            CWait(Tween.Completed);
+            wait(Time or 5);
+            if (Clone) then TweenDestroy() end
+        end)()
+
+        AddConnection(CConnect(Clone.Close.MouseButton1Click, TweenDestroy));
+        
+        if (Title ~= "Warning" and Title ~= "Error") then
+             -- Silent logging
+             -- Utils.Print(format("%s - %s", Title, Message), Caller, true);
+        end
+        return Clone
+    else
+        -- Support for private messaging system within Zayn Hub
+        local ChatRemote = Services.ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") and 
+                           Services.ReplicatedStorage.DefaultChatSystemChatEvents:FindFirstChild("SayMessageRequest")
+        if ChatRemote then
+            ChatRemote:FireServer(format("/w %s [ZAYN] %s: %s", Caller.Name, Title, Message), "All");
+        end
+    end
+end
+
+-- Smart Name Matching for Commands
+Utils.MatchSearch = function(String1, String2)
+    return String1 == sub(String2, 1, #String1);
+end
+
+Utils.StringFind = function(Table, String)
+    for _, v in ipairs(Table) do
+        if (Utils.MatchSearch(String, v)) then return v end
+    end
+end
+
+-- Advanced Argument Parser (e.g., !kill near -> !kill nearest)
+Utils.GetPlayerArgs = function(Arg)
+    Arg = lower(Arg);
+    local SpecialCases = {"all", "others", "random", "me", "nearest", "farthest", "npcs", "allies", "enemies"}
+    
+    local FoundSpecial = Utils.StringFind(SpecialCases, Arg)
+    if (FoundSpecial) then return FoundSpecial end
+
+    local CurrentPlayers = GetPlayers(Players);
+    for i, v in next, CurrentPlayers do
+        local Name, DisplayName = lower(v.Name), lower(v.DisplayName)
+        if (Name ~= DisplayName and Utils.MatchSearch(Arg, DisplayName)) then
+            return DisplayName;
+        end
+        if (Utils.MatchSearch(Arg, Name)) then
+            return Name;
+        end
+    end
+end
+-- [[ ZAYN HUB - INTERACTIVE & AESTHETIC UTILITIES ]] --
+
+-- ToolTip Logic (Zayn Mouse-Follow Style)
+Utils.ToolTip = function(Object, Message)
+    local CloneToolTip
+    local TextService = Services.TextService
+
+    AddConnection(CConnect(Object.MouseEnter, function()
+        -- Show tooltip only if object is visible and tooltip doesn't exist
+        if (Object.BackgroundTransparency < 1 and not CloneToolTip) then
+            local TextSize = TextService:GetTextSize(Message, 12, Enum.Font.Gotham, Vector2.new(200, math.huge)).Y > 24
+
+            CloneToolTip = Clone(UI.ToolTip)
+            CloneToolTip.Text = Message
+            CloneToolTip.TextScaled = TextSize
+            CloneToolTip.Visible = true
+            CloneToolTip.Parent = UI
+        end
+    end))
+
+    AddConnection(CConnect(Object.MouseLeave, function()
+        if (CloneToolTip) then
+            Destroy(CloneToolTip);
+            CloneToolTip = nil
+        end
+    end))
+
+    -- Smooth mouse follow logic for Zayn Hub
+    AddConnection(CConnect(Services.UserInputService.InputChanged, function(Input)
+        if (CloneToolTip and Input.UserInputType == Enum.UserInputType.MouseMovement) then
+            CloneToolTip.Position = UDim2.fromOffset(Input.Position.X + 15, Input.Position.Y + 15)
+        end
+    end))
+end
+
+-- Clear UI Container (Zayn Helper)
+Utils.ClearAllObjects = function(Object)
+    local Children = GetChildren(Object);
+    for i = 1, #Children do
+        local Child = Children[i]
+        if (IsA(Child, "GuiObject")) then
+            Destroy(Child);
+        end
+    end
+end
+
+-- Zayn High-Aura Rainbow Text (RichText Optimized)
+Utils.Rainbow = function(TextObject)
+    local Text = TextObject.Text
+    local Frequency = 2 -- Adjust for speed
+    local TotalCharacters = 0
+    local Strings = {}
+
+    TextObject.RichText = true
+
+    for Character in gmatch(Text, ".") do
+        if match(Character, "%s") then
+            Strings[#Strings + 1] = Character
+        else
+            TotalCharacters = TotalCharacters + 1
+            Strings[#Strings + 1] = {'<font color="rgb(%i, %i, %i)">' .. Character .. '</font>'}
+        end
+    end
+
+    local Connection = AddConnection(CConnect(Heartbeat, function()
+        local FinalString = ""
+        local Counter = TotalCharacters
+
+        for _, CharacterTable in ipairs(Strings) do
+            local Char = CharacterTable
+            if (type(CharacterTable) == "table") then
+                Counter = Counter - 1
+                -- Zayn Rainbow Math
+                local Color = Color3.fromHSV((tick() * Frequency + (Counter / TotalCharacters)) % 1, 0.8, 1)
+                Char = format(CharacterTable[1], floor(Color.R * 255), floor(Color.G * 255), floor(Color.B * 255))
+            end
+            FinalString = FinalString .. Char
+        end
+        TextObject.Text = FinalString
+    end));
+
+    -- Auto-disconnect after 150s to prevent lag in long sessions
+    delay(150, function()
+        if Connection then Disconnect(Connection) end
+    end)
+end
+
+-- World Position to Screen Position (For ESP/Tags)
+Utils.Vector3toVector2 = function(Vector)
+    local Camera = Workspace.CurrentCamera
+    local Pos, OnScreen = Camera:WorldToViewportPoint(Vector)
+    return Vector2.new(Pos.X, Pos.Y), OnScreen
+end
+
+-- Zayn Player Tagging (Visual Helper)
+Utils.AddTag = function(Tag)
+    if (not Tag or not Tag.Player) then return end
+    local Character = Tag.Player.Character
+    if (not Character) then return end
+    
+    -- Logic for Zayn VIP/Owner Tags can be added here
+end
+-- [[ ZAYN HUB - PLAYER TAGS & MARQUEE EFFECTS ]] --
+
+-- Zayn Custom Head Tag System
+Utils.AddTag = function(Tag)
+    if (not Tag or not Tag.Player) then return end
+    
+    local PlrCharacter = Tag.Player.Character or Tag.Player.CharacterAdded:Wait()
+    local Head = WaitForChild(PlrCharacter, "Head", 5)
+    if not Head then return end
+
+    -- Creating Zayn Billboard GUI
+    local Billboard = InstanceNew("BillboardGui")
+    Billboard.Name = "ZaynTag_" .. GenerateGUID(Services.HttpService)
+    Billboard.Parent = UI
+    Billboard.AlwaysOnTop = true
+    Billboard.Adornee = Head
+    Billboard.Size = UDim2.new(0, 200, 0, 50)
+    Billboard.StudsOffset = Vector3New(0, 3, 0) -- Offset above head
+    ProtectInstance(Billboard)
+
+    local TextLabel = InstanceNew("TextLabel", Billboard)
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.TextStrokeTransparency = 0.5
+    TextLabel.Size = UDim2.new(1, 0, 1, 0)
+    TextLabel.TextSize = 16
+    TextLabel.Font = Enum.Font.GothamBold
+    TextLabel.Text = format("%s [%s]", Tag.Name or Tag.Player.Name, Tag.Tag or "PLAYER")
+
+    -- Zayn Aesthetic: Rainbow or Custom Color
+    if (Tag.Rainbow) then
+        Utils.Rainbow(TextLabel)
+    elseif (Tag.Colour) then
+        TextLabel.TextColor3 = Color3.fromRGB(unpack(Tag.Colour))
+    else
+        TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    end
+
+    -- Character Respawn Handling
+    local Added = AddConnection(CConnect(Tag.Player.CharacterAdded, function(NewChar)
+        local NewHead = WaitForChild(NewChar, "Head", 5)
+        if NewHead then Billboard.Adornee = NewHead end
+    end))
+
+    -- Cleanup on Player Leave
+    AddConnection(CConnect(Players.PlayerRemoving, function(plr)
+        if (plr == Tag.Player) then
+            Disconnect(Added)
+            Destroy(Billboard)
+        end
+    end))
+end
+
+-- Zayn RichText Font Generator (RGB Support)
+Utils.TextFont = function(Text, RGBTable)
+    local RGB = concat(RGBTable, ",")
+    local Letters = {}
+    gsub(Text, ".", function(x) Letters[#Letters + 1] = x end)
+    
+    local RichText = map(Letters, function(i, letter)
+        return format('<font color="rgb(%s)">%s</font>', RGB, letter)
+    end)
+    
+    return concat(RichText) .. " "
+end
+
+-- Zayn Marquee: Auto-scroll long text on hover
+Utils.Thing = function(Object)
+    local Container = InstanceNew("Frame")
+    local Hitbox = InstanceNew("ImageButton")
+    local UDim2fromOffset = UDim2.fromOffset
+
+    Container.Name = "Zayn_ScrollContainer"
+    Container.Parent = Object.Parent
+    Container.BackgroundTransparency = 1
+    Container.ClipsDescendants = true
+    Container.Position = Object.Position
+    Container.Size = UDim2fromOffset(Object.AbsoluteSize.X, Object.AbsoluteSize.Y)
+    
+    Object.AutomaticSize = Enum.AutomaticSize.X
+    Object.Size = UDim2.fromScale(1, 1)
+    Object.Parent = Container
+    Object.Position = UDim2fromOffset(0, 0)
+    
+    Hitbox.Name = "Zayn_ScrollHitbox"
+    Hitbox.Parent = Container.Parent
+    Hitbox.BackgroundTransparency = 1
+    Hitbox.Size = Container.Size
+    Hitbox.Position = Container.Position
+    Hitbox.ZIndex = Object.ZIndex + 5
+    
+    local MouseIn = false
+    
+    AddConnection(CConnect(Hitbox.MouseEnter, function()
+        if Object.AbsoluteSize.X > Container.AbsoluteSize.X then
+            MouseIn = true
+            task.spawn(function()
+                while MouseIn do
+                    local Diff = Container.AbsoluteSize.X - Object.AbsoluteSize.X
+                    local T1 = Utils.Tween(Object, "Quad", "InOut", 1.5, {Position = UDim2fromOffset(Diff - 5, 0)})
+                    CWait(T1.Completed)
+                    task.wait(0.5)
+                    local T2 = Utils.Tween(Object, "Quad", "InOut", 1.5, {Position = UDim2fromOffset(0, 0)})
+                    CWait(T2.Completed)
+                    task.wait(0.5)
+                end
+            end)
+        end
+    end))
+
+    AddConnection(CConnect(Hitbox.MouseLeave, function()
+        MouseIn = false
+        Utils.Tween(Object, "Quad", "Out", 0.3, {Position = UDim2fromOffset(0, 0)})
+    end))
+    
+    return Object
+end
+-- [[ ZAYN HUB - INTRO & TOGGLE UTILITIES ]] --
+
+-- Zayn Intro: Smooth opening/closing animation for UI Panels
+Utils.Intro = function(Object)
+    local Frame = InstanceNew("Frame")
+    local UICorner = InstanceNew("UICorner")
+    local CornerRadius = FindFirstChild(Object, "UICorner") and Object.UICorner.CornerRadius or UDim.new(0, 0)
+    local UDim2fromOffset = UDim2.fromOffset
+
+    Frame.Name = "ZaynIntroFrame"
+    Frame.ZIndex = 2000
+    Frame.Size = UDim2fromOffset(Object.AbsoluteSize.X, Object.AbsoluteSize.Y)
+    Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+    
+    -- Positioning for the Intro Frame
+    Frame.Position = UDim2.new(
+        Object.Position.X.Scale, Object.Position.X.Offset + (Object.AbsoluteSize.X / 2), 
+        Object.Position.Y.Scale, Object.Position.Y.Offset + (Object.AbsoluteSize.Y / 2)
+    )
+    Frame.BackgroundColor3 = Object.BackgroundColor3
+    Frame.BorderSizePixel = 0
+    UICorner.CornerRadius = CornerRadius
+    UICorner.Parent = Frame
+    Frame.Parent = Object.Parent
+
+    if (Object.Visible) then
+        -- Zayn Closing Logic (Shrink to Dot)
+        Frame.BackgroundTransparency = 1
+        local T1 = Utils.Tween(Frame, "Quad", "Out", 0.25, {BackgroundTransparency = 0})
+        CWait(T1.Completed)
+        Object.Visible = false
+
+        Utils.Tween(UICorner, "Quad", "Out", 0.25, {CornerRadius = UDim.new(1, 0)})
+        local T2 = Utils.Tween(Frame, "Quad", "Out", 0.25, {Size = UDim2fromOffset(0, 0)})
+        CWait(T2.Completed)
+        Destroy(Frame)
+    else
+        -- Zayn Opening Logic (Expand from Dot)
+        Frame.Visible = true
+        Frame.Size = UDim2fromOffset(0, 0)
+        UICorner.CornerRadius = UDim.new(1, 0)
+
+        Utils.Tween(UICorner, "Quad", "Out", 0.25, {CornerRadius = CornerRadius})
+        local T1 = Utils.Tween(Frame, "Quad", "Out", 0.25, {Size = UDim2fromOffset(Object.AbsoluteSize.X, Object.AbsoluteSize.Y)})
+        CWait(T1.Completed)
+        Object.Visible = true
+
+        local T2 = Utils.Tween(Frame, "Quad", "Out", 0.25, {BackgroundTransparency = 1})
+        CWait(T2.Completed)
+        Destroy(Frame)
+    end
+end
+
+-- Zayn Gradient: Create smooth color transitions
+Utils.MakeGradient = function(ColorTable)
+    local Table = {}
+    local ColorSequenceKeypointNew = ColorSequenceKeypoint.new
+    for Time, Color in next, ColorTable do
+        Table[#Table + 1] = ColorSequenceKeypointNew(Time - 1, Color)
+    end
+    return ColorSequence.new(Table)
+end
+
+-- Zayn Debounce: Prevent double-execution of scripts
+Utils.Debounce = function(Func)
+    local IsActive = false
+    return function(...)
+        if (not IsActive) then
+            IsActive = true
+            Func(...)
+            IsActive = false
+        end
+    end
+end
+
+-- Zayn Toggle: Modern Switch System for Cheats/Features
+Utils.ToggleFunction = function(Container, Enabled, Callback)
+    local Switch = Container.Switch
+    local Hitbox = Container.Hitbox
+    local Color3fromRGB = Color3.fromRGB
+    local UDim2fromOffset = UDim2.fromOffset
+
+    -- Zayn Theme Colors
+    local ActiveColor = Color3fromRGB(255, 79, 87) -- Zayn Red-Pink
+    local InactiveColor = Color3fromRGB(35, 35, 35)
+
+    -- Initial State
+    Container.BackgroundColor3 = Enabled and ActiveColor or InactiveColor
+    Switch.Position = Enabled and UDim2.new(1, -18, 0, 2) or UDim2fromOffset(2, 2)
+
+    AddConnection(CConnect(Hitbox.MouseButton1Click, function()
+        Enabled = not Enabled
+        
+        Utils.Tween(Switch, "Quad", "Out", 0.25, {
+            Position = Enabled and UDim2.new(1, -18, 0, 2) or UDim2fromOffset(2, 2)
+        })
+        Utils.Tween(Container, "Quad", "Out", 0.25, {
+            BackgroundColor3 = Enabled and ActiveColor or InactiveColor
+        })
+        
+        Callback(Enabled)
+    end))
+end
+-- [[ ZAYN HUB - INTERNAL CONSOLE LOGGING ]] --
+
+do
+    local AmountPrint, AmountWarn, AmountError = 0, 0, 0;
+
+    -- Zayn Warning: Yellow colored output for minor issues
+    Utils.Warn = function(Text, Plr)
+        local TimeOutputted = os.date("%X");
+        local Clone = Clone(UI.MessageOut);
+    
+        Clone.Name = "ZaynWarn_" .. tostring(AmountWarn + 1);
+        Clone.Text = format("[%s] WARNING: %s", TimeOutputted, Text);
+        Clone.TextColor3 = Color3.fromRGB(255, 218, 68); -- Zayn Yellow
+        Clone.Visible = true
+        Clone.TextTransparency = 1
+        Clone.Parent = Console.Frame.List
+    
+        Utils.Tween(Clone, "Sine", "Out", 0.25, { TextTransparency = 0 })
+    
+        -- Auto-scroll console list
+        Console.Frame.List.CanvasSize = UDim2.fromOffset(0, Console.Frame.List.UIListLayout.AbsoluteContentSize.Y);
+        AmountWarn = AmountWarn + 1
+        Utils.Notify(Plr, "Warning", Text);
+    end
+    
+    -- Zayn Error: Red colored output for critical failures
+    Utils.Error = function(Text, Caller, FromNotif)
+        local TimeOutputted = os.date("%X");
+        local Clone = Clone(UI.MessageOut);
+    
+        Clone.Name = "ZaynError_" .. tostring(AmountError + 1);
+        Clone.Text = format("[%s] ERROR: %s", TimeOutputted, Text);
+        Clone.TextColor3 = Color3.fromRGB(215, 90, 74); -- Zayn Red
+        Clone.Visible = true
+        Clone.TextTransparency = 1
+        Clone.Parent = Console.Frame.List
+    
+        Utils.Tween(Clone, "Sine", "Out", 0.25, { TextTransparency = 0 })
+    
+        Console.Frame.List.CanvasSize = UDim2.fromOffset(0, Console.Frame.List.UIListLayout.AbsoluteContentSize.Y);
+        AmountError = AmountError + 1
+    end
+    
+    -- Zayn Print: Standard white output for general info
+    Utils.Print = function(Text, Caller, FromNotif)
+        local TimeOutputted = os.date("%X");
+        local Clone = Clone(UI.MessageOut);
+    
+        Clone.Name = "ZaynPrint_" .. tostring(AmountPrint + 1);
+        Clone.Text = format("[%s] INFO: %s", TimeOutputted, Text);
+        Clone.TextColor3 = Color3.fromRGB(220, 224, 234); -- Zayn Text Color
+        Clone.Visible = true
+        Clone.TextTransparency = 1
+        Clone.Parent = Console.Frame.List
+    
+        Utils.Tween(Clone, "Sine", "Out", 0.25, { TextTransparency = 0 })
+    
+        Console.Frame.List.CanvasSize = UDim2.fromOffset(0, Console.Frame.List.UIListLayout.AbsoluteContentSize.Y);
+        AmountPrint = AmountPrint + 1
+        
+        -- Only notify small messages to avoid screen clutter
+        if (len(Text) <= 35 and not FromNotif) then
+            Utils.Notify(Caller, "Output", Text);
+        end
+    end
+end
+-- [[ ZAYN HUB - COMMAND EXECUTION ENGINE ]] --
+
+local CommandsTable = {}
+local RespawnTimes = {}
+
+-- Zayn Check: Checks if player has any tool (Backpack or Character)
+local HasTool = function(plr)
+    plr = plr or LocalPlayer
+    local Char = GetCharacter(plr)
+    if not Char then return false end
+    
+    local CharChildren = GetChildren(Char)
+    local BackpackChildren = GetChildren(plr.Backpack)
+    local ToolFound = false
+    local tbl = tbl_concat(CharChildren, BackpackChildren)
+    
+    for i = 1, #tbl do
+        if IsA(tbl[i], "Tool") then
+            ToolFound = true
+            break
+        end
+    end
+    return ToolFound
+end
+
+-- Zayn Check: R6 vs R15 Verification
+local isR6 = function(plr)
+    plr = plr or LocalPlayer
+    local Humanoid = GetHumanoid(plr)
+    return Humanoid and Humanoid.RigType == Enum.HumanoidRigType.R6 or false
+end
+
+-- Zayn Check: Sitting Status
+local isSat = function(plr)
+    local Humanoid = GetHumanoid(plr or LocalPlayer)
+    return Humanoid and Humanoid.Sit or false
+end
+
+-- Zayn Stealth: Disables default animations for custom scripts
+local DisableAnimate = function()
+    local Char = GetCharacter()
+    local Animate = Char and FindFirstChild(Char, "Animate")
+    if (Animate and IsA(Animate, "LocalScript")) then
+        -- Zayn Spoof logic to bypass simple anti-cheats
+        if SpoofProperty then SpoofProperty(Animate, "Disabled") end
+        Animate.Disabled = true
+    end
+end
+
+-- Zayn Tool Cleaner: Strips tools of sounds/scripts for clean execution
+local GetCorrectToolWithHandle = function()
+    local Tools = filter(tbl_concat(GetChildren(LocalPlayer.Backpack), GetChildren(LocalPlayer.Character)), function(i, Tool)
+        local Correct = IsA(Tool, "Tool")
+        if (Correct and (Tool.RequiresHandle or FindFirstChild(Tool, "Handle"))) then
+            -- Cleaning tool for Zayn scripts
+            for _, v in next, GetDescendants(Tool) do
+                if (IsA(v, "Sound") or IsA(v, "Camera") or IsA(v, "LocalScript")) then
+                    Destroy(v)
+                end
+            end
+            return true
+        end
+        return false
+    end)
+    return Tools[1]
+end
+
+-- Zayn Pre-Command Checks
+local CommandRequirements = {
+    [1] = { Func = HasTool, Message = "Bhai, is command ke liye tool chahiye!" },
+    [2] = { Func = isR6, Message = "Ye command sirf R6 avatar pe chalti hai!" },
+    [3] = { Func = function() return GetCharacter() ~= nil end, Message = "Pehle spawn toh ho jao!" }
+}
+
+-- Zayn Core: Command Registration Function
+local AddCommand = function(name, aliases, description, options, func, isplugin)
+    local Cmd = {
+        Name = name,
+        Aliases = aliases,
+        Description = description,
+        Options = options,
+        Function = function()
+            -- Validation Logic
+            for i, v in next, options do
+                if (type(v) == 'function' and v() == false) then
+                    Utils.Warn("Requirements not met for this command.", LocalPlayer)
+                    return nil
+                elseif (type(v) == 'number' and CommandRequirements[v]) then
+                    if (CommandRequirements[v].Func() == false) then
+                        Utils.Warn(CommandRequirements[v].Message, LocalPlayer)
+                        return nil
+                    end
+                end
+            end
+            return func
+        end,
+        -- Parsing Arguments needed
+        ArgsNeeded = tonumber(filter(options, function(i,v) return type(v) == "string" end)[1]) or 0,
+        Args = filter(options, function(i, v) return type(v) == "table" end)[1] or {},
+        CmdEnv = {},
+        IsPlugin = isplugin == true
+    }
+
+    CommandsTable[name] = Cmd
+    if (type(aliases) == 'table') then
+        for _, v in next, aliases do
+            CommandsTable[v] = Cmd
+        end
+    end
+    return true
+end
+-- [[ ZAYN HUB - EXECUTION & BYPASS CORE ]] --
+
+local LoadCommand = function(Name)
+    return rawget(CommandsTable, Name)
+end
+
+local RemoveCommand = function(Name)
+    local Command = LoadCommand(Name)
+    if (Command) then
+        CommandsTable[Name] = nil
+        local CommandLabel = FindFirstChild(Commands.Frame.List, Name)
+        if (CommandLabel) then Destroy(CommandLabel) end
+        return true
+    end
+    return false
+end
+
+-- Zayn Executor: The heart of command processing
+local PluginConf = { SafePlugins = true }
+local ExecuteCommand = function(Name, Args, Caller)
+    local Command = LoadCommand(Name)
+    if (Command) then
+        -- Arg Check
+        if (Command.ArgsNeeded > #Args) then
+            return Utils.Warn(format("Bhai, %d arguments chahiye (aapne kam diye hain)", Command.ArgsNeeded), LocalPlayer)
+        end
+
+        local Context
+        local set_id = syn and syn.set_thread_identity or setidentity
+        local get_id = syn and syn.get_thread_identity or getidentity
+
+        -- Safe Execution Context for Plugins
+        if (Command.IsPlugin and set_id and get_id and PluginConf.SafePlugins) then
+            Context = get_id()
+            set_id(2)
+        end
+
+        local Success, Ret = xpcall(function()
+            local Func = Command.Function()
+            if (Func) then
+                local Result = Func(Caller, Args, Command.CmdEnv)
+                if (Result) then Utils.Notify(Caller, "Zayn Exec", Result) end
+                
+                -- History Tracking
+                if (Command.Name ~= "lastcommand") then
+                    if (#LastCommand >= 3) then shift(LastCommand) end
+                    LastCommand[#LastCommand + 1] = {Command.Name, Args, Caller, Command.CmdEnv}
+                end
+            end
+        end, function(Err)
+            if (Debug) then
+                Utils.Error(format("[ZAYN CMD ERROR]: %s | Trace: %s", Name, debug.traceback(Err)), Caller)
+                Utils.Notify(Caller, "Error", "Command fail ho gayi, Console check karo!")
+            end
+        end)
+
+        if (Command.IsPlugin and set_id and Context) then set_id(Context) end
+    else
+        Utils.Warn("Command '" .. Name .. "' nahi mili!", Caller)
+    end
+end
+
+-- Zayn Bypass: Replaces Humanoid to break server-side checks
+local ReplaceHumanoid = function(Hum, R)
+    local Humanoid = Hum or GetHumanoid()
+    if not Humanoid then return end
+    
+    local NewHumanoid = Clone(Humanoid)
+    if (R) then NewHumanoid.Name = "1" end
+    
+    NewHumanoid.Parent = Humanoid.Parent
+    NewHumanoid.Name = Humanoid.Name
+    Services.Workspace.CurrentCamera.CameraSubject = NewHumanoid
+    
+    Destroy(Humanoid)
+    if SpoofInstance then SpoofInstance(NewHumanoid) end
+    return NewHumanoid
+end
+
+-- Zayn Grip: Perfect Tool Positioning
+local CFrameTool = function(tool, pos)
+    local Char = GetCharacter()
+    local RightArm = FindFirstChild(Char, "RightLowerArm") or FindFirstChild(Char, "Right Arm")
+    if not RightArm then return end
+    
+    local ArmPos = RightArm.CFrame * CFrame.new(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, -1, 0)
+    tool.Grip = Inverse(toObjectSpace(ArmPos, pos))
+end
+
+-- Zayn Cleaner: Disconnects connections of a specific command
+local DisableAllCmdConnections = function(Cmd)
+    local Command = LoadCommand(Cmd)
+    if (Command and Command.CmdEnv) then
+        for _, v in next, flat(Command.CmdEnv) do
+            if (type(v) == 'userdata' and v.Disconnect) then
+                Disconnect(v)
+            end
+        end
+    end
+    return Command
+end
+-- [[ ZAYN HUB - INPUT & MACRO SYSTEM ]] --
+
+local Keys = {}
+
+do
+    local UserInputService = Services.UserInputService
+    local WindowFocused = true
+    
+    AddConnection(CConnect(UserInputService.WindowFocusReleased, function() WindowFocused = false end))
+    AddConnection(CConnect(UserInputService.WindowFocused, function() WindowFocused = true end))
+
+    AddConnection(CConnect(UserInputService.InputBegan, function(Input, GameProcessed)
+        -- Keyboard Focus Check
+        Keys["GameProcessed"] = GameProcessed and WindowFocused and (UserInputService:GetFocusedTextBox() ~= nil)
+        Keys["LastEntered"] = Input.KeyCode
+        
+        if (GameProcessed) then return end
+        
+        local KeyCodeStr = split(tostring(Input.KeyCode), ".")[3]
+        Keys[KeyCodeStr] = true
+
+        -- Zayn Macro Execution
+        for i = 1, #Macros do
+            local Macro = Macros[i]
+            if (Tfind(Macro.Keys, Input.KeyCode)) then
+                if (#Macro.Keys == 2) then
+                    if (UserInputService:IsKeyDown(Macro.Keys[1]) and UserInputService:IsKeyDown(Macro.Keys[2])) then
+                        ExecuteCommand(Macro.Command, Macro.Args, LocalPlayer)
+                    end
+                else
+                    ExecuteCommand(Macro.Command, Macro.Args, LocalPlayer)
+                end
+            end
+        end
+
+        -- Zayn Console Toggle (F8)
+        if (Input.KeyCode == Enum.KeyCode.F8) then
+            if (Console.Visible) then
+                local Tween = Utils.TweenAllTrans(Console, .25)
+                CWait(Tween.Completed)
+                Console.Visible = false
+            else
+                Console.Visible = true
+                Utils.ClearAllObjects(Console.Frame.List)
+                local Tween = Utils.TweenAllTransToObject(Console, .25, ConsoleTransparencyClone)
+                
+                -- Dynamic Console Scrolling Logic
+                local ListLayout = Console.Frame.List:FindFirstChildOfClass("UIListLayout")
+                if ListLayout then
+                    AddConnection(CConnect(ListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
+                        local List = Console.Frame.List
+                        if (List.CanvasSize.Y.Offset - List.AbsoluteSize.Y - List.CanvasPosition.Y < 20) then
+                            task.wait()
+                            List.CanvasPosition = Vector2.new(0, List.CanvasSize.Y.Offset + 500)
+                        end
+                    end))
+                end
+            end
+        end
+    end))
+
+    AddConnection(CConnect(UserInputService.InputEnded, function(Input, GameProcessed)
+        if (GameProcessed) then return end
+        local KeyCodeStr = split(tostring(Input.KeyCode), ".")[3]
+        if (Keys[KeyCodeStr]) then Keys[KeyCodeStr] = false end
+    end))
+end
+
+-- [[ ZAYN HUB - CORE COMMANDS ]] --
+
+-- Command: Check total loaded commands
+AddCommand("commandcount", {"cc"}, "Total commands in Zayn Hub", {}, function(Caller)
+    local Count = 0
+    local Seen = {}
+    for i, v in next, CommandsTable do
+        if not Seen[v] then
+            Seen[v] = true
+            Count = Count + 1
+        end
+    end
+    return "Zayn Hub has " .. tostring(Count) .. " commands loaded."
+end)
+
+-- Command: WalkSpeed (With Anti-Cheat Spoof)
+AddCommand("walkspeed", {"ws", "speed"}, "Sets your movement speed", {}, function(Caller, Args, CEnv)
+    local Humanoid = GetHumanoid()
+    if not Humanoid then return end
+    CEnv[1] = Humanoid.WalkSpeed
+    if SpoofProperty then SpoofProperty(Humanoid, "WalkSpeed") end
+    Humanoid.WalkSpeed = tonumber(Args[1]) or 16
+    return "Speed set to: " .. Humanoid.WalkSpeed
+end)
+
+-- Command: Kill (Bypass Kill for R6/R15)
+AddCommand("kill", {"tkill"}, "Kills a target player", {"1", 1, 3}, function(Caller, Args)
+    local Target = GetPlayerArgs(Args[1])
+    local Targets = (Target == "all") and Players:GetPlayers() or {Players:FindFirstChild(Target)}
+    
+    local Character = GetCharacter()
+    local Humanoid = ReplaceHumanoid()
+    DisableAnimate()
+
+    task.spawn(function()
+        for _, v in next, Targets do
+            if v == LocalPlayer then continue end
+            local TChar = v.Character
+            local TRoot = TChar and TChar:FindFirstChild("HumanoidRootPart")
+            
+            if TRoot and not isSat(v) then
+                local Tool = GetCorrectToolWithHandle()
+                if Tool then
+                    Tool.Parent = Character
+                    Tool.Handle.Size = Vector3.new(4, 4, 4)
+                    CFrameTool(Tool, TRoot.CFrame)
+                    -- Trigger Touch
+                    firetouchinterest(TRoot, Tool.Handle, 0)
+                    firetouchinterest(TRoot, Tool.Handle, 1)
+                end
+            end
+        end
+    end)
+    return "Attempting to kill: " .. tostring(Target)
+end)
+-- [[ ZAYN HUB - ADVANCED COMBAT COMMANDS ]] --
+
+-- Command: Kill Variant 2 (Ping-Based Instant Kill)
+AddCommand("kill2", {"k2"}, "High-success rate kill variant", {1, "1"}, function(Caller, Args)
+    local Target = GetPlayerArgs(Args[1])
+    local Targets = (Target == "all") and Players:GetPlayers() or {Players:FindFirstChild(Target)}
+    
+    local Humanoid = GetHumanoid()
+    local OldPos = GetRoot().CFrame
+    
+    -- Zayn Bypass: Character Refresh
+    ReplaceCharacter()
+    
+    -- Dynamic timing based on game respawn settings
+    task.wait(Players.RespawnTime - (#Targets == 1 and 0.05 or 0.09))
+    
+    local Humanoid2 = ReplaceHumanoid(Humanoid)
+    local DestroyFlag = false
+
+    task.spawn(function()
+        for _, v in next, Targets do
+            if v == LocalPlayer or isSat(v) then continue end
+            
+            local TRoot = GetRoot(v)
+            local Tool = GetCorrectToolWithHandle()
+            
+            if TRoot and Tool then
+                Tool.Parent = GetCharacter()
+                Tool.Handle.Size = Vector3.new(4, 4, 4)
+                
+                -- Offset CFrame for better hit detection
+                CFrameTool(Tool, TRoot.CFrame * CFrame.new(0, 3, 0))
+                
+                firetouchinterest(TRoot, Tool.Handle, 0)
+                task.wait()
+                if Tool:FindFirstChild("Handle") then
+                    firetouchinterest(TRoot, Tool.Handle, 1)
+                end
+            end
+        end
+    end)
+
+    -- Force Reset State
+    if Humanoid2 then Humanoid2:ChangeState(15) end
+    task.wait(0.2)
+    ReplaceCharacter()
+    
+    -- Return to original spot
+    local NewChar = LocalPlayer.CharacterAdded:Wait()
+    WaitForChild(NewChar, "HumanoidRootPart").CFrame = OldPos
+    return "Kill2 variant executed on: " .. tostring(Target)
+end)
+
+-- Command: LoopKill (Persistent Harassment)
+AddCommand("loopkill", {"lk"}, "Continuously kills a target", {3, "1"}, function(Caller, Args, CEnv)
+    local TargetName = Args[1]
+    local TargetPlayers = (TargetName == "all") and Players:GetPlayers() or {Players:FindFirstChild(TargetName)}
+    
+    -- Storing targets in command environment for loop control
+    for _, v in next, TargetPlayers do CEnv[#CEnv + 1] = v end
+
+    Utils.Notify(LocalPlayer, "LoopKill", "Targeting: " .. TargetName)
+    
+    repeat
+        local Char = GetCharacter()
+        local Hum = GetHumanoid()
+        if not Char or not Hum then break end
+        
+        UnequipTools(Hum)
+        DisableAnimate()
+        
+        local FakeHum = ReplaceHumanoid(Hum)
+        FakeHum:ChangeState(15)
+
+        for _, v in next, TargetPlayers do
+            if v == LocalPlayer then continue end
+            local TRoot = GetRoot(v)
+            local Tools = GetChildren(LocalPlayer.Backpack)
+            
+            for _, tool in next, Tools do
+                if IsA(tool, "Tool") and TRoot then
+                    tool.Parent = Char
+                    local OldSize = tool.Handle.Size
+                    tool.Handle.Size = Vector3.new(5, 5, 5) -- Increased hitbox
+                    
+                    for i = 1, 3 do
+                        firetouchinterest(TRoot, tool.Handle, 0)
+                        task.wait(0.05)
+                        firetouchinterest(TRoot, tool.Handle, 1)
+                    end
+                    tool.Handle.Size = OldSize
+                end
+            end
+        end
+        
+        task.wait(0.5)
+        if Char then Char:Destroy() end
+        local Respawned = LocalPlayer.CharacterAdded:Wait()
+        WaitForChild(Respawned, "HumanoidRootPart")
+        task.wait(0.5)
+        
+    until not CEnv or #CEnv == 0 or not next(LoadCommand("loopkill").CmdEnv)
+end)
+
+-- Command: UnloopKill (Stop the carnage)
+AddCommand("unloopkill", {"unlk", "unlkill"}, "Stops the loopkill", {3, "1"}, function(Caller, Args)
+    LoadCommand("loopkill").CmdEnv = {}
+    return "Loopkill disabled for all targets."
+end)
+-- [[ ZAYN HUB - TELEPORTATION LOGIC ]] --
+
+-- Command: Bring (Teleports player to you or a target position)
+AddCommand("bring", {"fetch"}, "Brings a user to your location", {1}, function(Caller, Args)
+    local Target = GetPlayerArgs(Args[1])
+    local Targets = (Target == "all") and Players:GetPlayers() or {Players:FindFirstChild(Target)}
+    local Target2 = Args[2] and Players:FindFirstChild(GetPlayerArgs(Args[2]))
+    
+    local OldPos = GetRoot(LocalPlayer).CFrame
+    
+    -- Safety Check: If someone else tries to bring you
+    if (Caller ~= LocalPlayer and table.find(Targets, LocalPlayer)) then
+        GetRoot().CFrame = GetRoot(Caller).CFrame * CFrame.new(-5, 0, 0)
+        return
+    end
+
+    -- Zayn Bypass Initialization
+    DisableAnimate()
+    local FakeHum = ReplaceHumanoid()
+    
+    local Target2Root = Target2 and GetRoot(Target2)
+    
+    task.spawn(function()
+        for _, v in next, Targets do
+            if v == LocalPlayer or isSat(v) then continue end
+            
+            local TRoot = GetRoot(v)
+            local Tool = GetCorrectToolWithHandle()
+            
+            if TRoot and Tool then
+                Tool.Parent = GetCharacter()
+                Tool.Handle.Size = Vector3.new(4, 4, 4)
+                
+                -- CFrame Manipulation: Set tool grip to the destination
+                local Destination = (Target2Root and Target2Root.CFrame or OldPos) * CFrame.new(-5, 0, 0)
+                CFrameTool(Tool, Destination)
+                
+                -- Execution (Multiple hits for stability)
+                if not syn then task.wait(0.1) end
+                for i = 1, 3 do
+                    firetouchinterest(TRoot, Tool.Handle, 0)
+                    task.wait()
+                    firetouchinterest(TRoot, Tool.Handle, 1)
+                end
+            end
+        end
+    end)
+    
+    task.wait(0.2)
+    if GetCharacter() then GetCharacter():Destroy() end
+    local NewChar = LocalPlayer.CharacterAdded:Wait()
+    WaitForChild(NewChar, "HumanoidRootPart").CFrame = OldPos
+    return "Brought " .. tostring(Target) .. " to destination."
+end)
+
+-- Command: Bring2 (High-Ping / Anti-Cheat Bypass variant)
+AddCommand("bring2", {"b2"}, "Another variant of bring for strict games", {1, 3, "1"}, function(Caller, Args)
+    local TargetName = GetPlayerArgs(Args[1])
+    local Targets = (TargetName == "all") and Players:GetPlayers() or {Players:FindFirstChild(TargetName)}
+    local Target2 = Args[2] and Players:FindFirstChild(GetPlayerArgs(Args[2]))
+    
+    local Humanoid = GetHumanoid()
+    ReplaceCharacter() -- Zayn Bypass: Fast Refresh
+    
+    -- Ping-based delay optimization
+    task.wait(Players.RespawnTime - (#Targets == 1 and 0.2 or 0.3))
+    
+    local OldPos = GetRoot().CFrame
+    DisableAnimate()
+    local Humanoid2 = ReplaceHumanoid(Humanoid)
+    
+    local Target2Root = Target2 and GetRoot(Target2)
+    local ShouldDestroy = false
+
+    task.spawn(function()
+        for _, v in next, Targets do
+            if v == LocalPlayer or isSat(v) then continue end
+            
+            local TRoot = GetRoot(v)
+            local Tool = GetCorrectToolWithHandle()
+            
+            if TRoot and Tool then
+                Tool.Parent = GetCharacter()
+                Tool.Handle.Size = Vector3.new(4, 4, 4)
+                
+                local Destination = (Target2Root and Target2Root.CFrame or OldPos) * CFrame.new(-5, 0, 0)
+                CFrameTool(Tool, Destination)
+                
+                if not syn then task.wait(0.1) end
+                for i = 1, 3 do
+                    firetouchinterest(TRoot, Tool.Handle, 0)
+                    task.wait()
+                    firetouchinterest(TRoot, Tool.Handle, 1)
+                end
+            end
+        end
+    end)
+
+    task.wait(0.2)
+    -- Void TP to prevent glitches
+    GetRoot().CFrame = CFrame.new(0, workspace.FallenPartsDestroyHeight + 50, 0)
+    
+    if GetCharacter() then GetCharacter():Destroy() end
+    local NewChar = LocalPlayer.CharacterAdded:Wait()
+    WaitForChild(NewChar, "HumanoidRootPart").CFrame = OldPos
+end)
+-- [[ ZAYN HUB - VOID / KILL3 LOGIC ]] --
+
+AddCommand("void", {"kill3", "vkill"}, "Sends a user into the void", {1,"1"}, function(Caller, Args)
+    local Target = GetPlayer(Args[1]);
+    local Target2 = Args[2] and GetPlayer(Args[2]);
+    local OldPos = GetRoot(Caller).CFrame
+
+    -- Admin Identity Verification (erennn0779)
+    local IsMaster = (LocalPlayer.Name == "erennn0779")
+    
+    local TempRespawnTimes = {}
+    for i = 1, #Target do
+        local v = Target[i]
+        TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
+    end
+
+    DisableAnimate();
+    ReplaceHumanoid();
+
+    -- R6 Bypass Logic
+    for i, v in next, Target do
+        if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
+            Destroy(LocalPlayer.Character);
+            CWait(LocalPlayer.CharacterAdded);
+            WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos;
+            task.wait(.1);
+            ReplaceHumanoid();
+        end
+    end
+
+    local Target2Root = Target2 and GetRoot(Target2 and Target2[1] or nil);
+    
+    for i = 1, #Target do
+        local v = Target[i]
+        if (GetCharacter(v)) then
+            if (isSat(v)) then
+                if (#Target == 1) then
+                    Utils.Notify(Caller or LocalPlayer, "Zayn Hub", v.Name .. " baitha hua hai, void nahi kar sakte!");
+                end
+                continue
+            end
+            
+            local TargetRoot = GetRoot(v);
+            if (not TargetRoot) then continue end
+
+            local Tool = GetCorrectToolWithHandle();
+            if (not Tool) then continue end
+            
+            Tool.Parent = GetCharacter();
+            Tool.Handle.Size = Vector3.new(4, 4, 4);
+            
+            -- Tool Grip manipulation for Void Drop
+            CFrameTool(Tool, (Target2 and Target2Root.CFrame or OldPos) * CFrame.new(-5, 0, 0));
+            
+            if (not syn) then task.wait(.1) end
+            for i2 = 1, 3 do
+                firetouchinterest(TargetRoot, Tool.Handle, 0);
+                task.wait();
+                firetouchinterest(TargetRoot, Tool.Handle, 1);
+            end
+        else
+            Utils.Notify(Caller or LocalPlayer, "Zayn Error", v.Name .. " dead hai ya root part nahi mila.");
+        end
+    end
+
+    -- [[ THE VOID TELEPORT ]] --
+    for i = 1, 3 do
+        -- Master erennn0779 ko safely void ke edge par le jaana
+        GetRoot().CFrame = CFrame.new(0, Services.Workspace.FallenPartsDestroyHeight + 50, 0);
+        task.wait();
+    end
+
+    task.wait(.2);
+    Destroy(LocalPlayer.Character);
+    
+    -- Returning Master to Original Position
+    local NewChar = CWait(LocalPlayer.CharacterAdded);
+    WaitForChild(NewChar, "HumanoidRootPart").CFrame = OldPos
+    
+    if IsMaster then
+        return "Target map se gayab! Voided successfully."
+    end
+end)
+-- [[ ZAYN HUB - FREEFALL LOGIC ]] --
+
+AddCommand("freefall", {"skyfall", "ff"}, "Sends a user high into the sky", {1,"1"}, function(Caller, Args)
+    local Target = GetPlayer(Args[1]);
+    local Target2 = Args[2] and GetPlayer(Args[2]);
+    local OldPos = GetRoot(Caller).CFrame
+
+    -- Identity Verification for erennn0779
+    local IsMaster = (LocalPlayer.Name == "erennn0779")
+    
+    local TempRespawnTimes = {}
+    for i = 1, #Target do
+        local v = Target[i]
+        TempRespawnTimes[v.Name] = RespawnTimes[LocalPlayer.Name] <= RespawnTimes[v.Name]
+    end
+
+    DisableAnimate();
+    ReplaceHumanoid();
+
+    -- R6/Respawn Bypass
+    for i, v in next, Target do
+        if (#Target == 1 and TempRespawnTimes[v.Name] and isR6(v)) then
+            Destroy(LocalPlayer.Character);
+            CWait(LocalPlayer.CharacterAdded);
+            WaitForChild(LocalPlayer.Character, "HumanoidRootPart").CFrame = OldPos;
+            task.wait(.1);
+            ReplaceHumanoid();
+        end
+    end
+
+    local Target2Root = Target2 and GetRoot(Target2 and Target2[1] or nil);
+    
+    for i = 1, #Target do
+        local v = Target[i]
+        if (GetCharacter(v)) then
+            if (isSat(v)) then
+                if (#Target == 1) then
+                    Utils.Notify(Caller or LocalPlayer, "Zayn Hub", v.Name .. " baitha hai, freefall nahi ho sakta.");
+                end
+                continue
+            end
+            
+            local TargetRoot = GetRoot(v);
+            if (not TargetRoot) then continue end
+
+            local Tool = GetCorrectToolWithHandle();
+            if (not Tool) then continue end
+            
+            Tool.Parent = GetCharacter();
+            Tool.Handle.Size = Vector3.new(4, 4, 4);
+            
+            -- Tool Grip manipulation to grab target
+            CFrameTool(Tool, (Target2 and Target2Root.CFrame or OldPos) * CFrame.new(-5, 0, 0));
+            
+            if (not syn) then task.wait(.1) end
+            for i2 = 1, 3 do
+                firetouchinterest(TargetRoot, Tool.Handle, 0);
+                task.wait();
+                firetouchinterest(TargetRoot, Tool.Handle, 1);
+            end
+        else
+            Utils.Notify(Caller or LocalPlayer, "Zayn Error", v.Name .. " dead hai.");
+        end
+    end
+
+    -- [[ THE SKY TELEPORT ]] --
+    local Root = GetRoot();
+    local RootPos = Root.Position
+    for i = 1, 3 do
+        -- Master erennn0779 target ko aasmaan mein le jaate hue
+        Root.CFrame = CFrame.new(RootPos.X, RootPos.Y + 1000, RootPos.Z);
+        task.wait();
+    end
+
+    task.wait(.2);
+    Destroy(LocalPlayer.Character);
+    
+    -- Returning Master to safety
+    local NewChar = CWait(LocalPlayer.CharacterAdded);
+    WaitForChild(NewChar, "HumanoidRootPart").CFrame = OldPos
+    
+    if IsMaster then
+        return "Target ko aasmaan ki sair kara di gayi hai!"
+    end
+end)
+-- [[ ZAYN HUB - STEALTH & UTILITY ]] --
+
+-- Command: Invisible (Bypasses most anti-cheats)
+AddCommand("invisible", {"invis"}, "Makes erennn0779 invisible", {3}, function(Caller, Args, CEnv)
+    local Root = GetRoot()
+    local OldPos = Root.CFrame
+    local Seat = Instance.new("Seat")
+    local Weld = Instance.new("Weld")
+    
+    -- Zayn Bypass: Character ko safe location par bhejna
+    Root.CFrame = CFrame.new(9e9, 9e9, 9e9)
+    task.wait(0.2)
+    Root.Anchored = true
+    
+    if ProtectInstance then ProtectInstance(Seat) end
+    Seat.Parent = Services.Workspace
+    Seat.CFrame = Root.CFrame
+    Seat.Anchored = false
+    
+    Weld.Parent = Seat
+    Weld.Part0 = Seat
+    Weld.Part1 = Root
+    Root.Anchored = false
+    Seat.CFrame = OldPos
+    
+    CEnv.Seat = Seat
+    CEnv.Weld = Weld
+    
+    -- Character Transparency Setup
+    for _, v in next, GetChildren(Root.Parent) do
+        if v:IsA("BasePart") then
+            CEnv[v] = v.Transparency
+            v.Transparency = v.Transparency <= 0.3 and 0.4 or v.Transparency
+        elseif v:IsA("Accessory") then
+            local Handle = v:FindFirstChildWhichIsA("BasePart")
+            if Handle then
+                CEnv[Handle] = Handle.Transparency
+                Handle.Transparency = Handle.Transparency <= 0.3 and 0.4 or Handle.Transparency    
+            end
+        end
+    end
+    return "Master Zayn, aap ab invisible hain!"
+end)
+
+-- Command: Tool Dupe (Multiply inventory tools)
+AddCommand("dupetools", {"dp"}, "Dupes tools for erennn0779", {"1", 1, {"protect"}}, function(Caller, Args, CEnv)
+    local Amount = tonumber(Args[1])
+    local Protected = Args[2] == "protect"
+    if not Amount then return "Bhai, number toh daalo kitne dupe karne hain!" end
+
+    CEnv[1] = true
+    local AmountDuped = 0
+    local Timer = (Players.RespawnTime * Amount) + (Amount * 0.4) + 1
+    
+    -- Notification for Master Zayn
+    Utils.Notify("ZAYN HUB", string.format("Duping tools... %d seconds left", Timer))
+
+    local Humanoid = GetHumanoid()
+    UnequipTools(Humanoid)
+    
+    -- Dupe Loop
+    for i = 1, Amount do
+        if not LoadCommand("dupetools").CmdEnv[1] then break end
+        
+        ReplaceCharacter()
+        local OldPos = GetRoot().CFrame
+        
+        task.wait(Players.RespawnTime - 0.05)
+        Humanoid = ReplaceHumanoid(Humanoid)
+        
+        local Tools = filter(GetChildren(LocalPlayer.Backpack), function(i, v) return v:IsA("Tool") end)
+        for _, v in next, Tools do
+            v.Parent = LocalPlayer.Character
+            v.Parent = Services.Workspace -- Drop to workspace
+        end
+        
+        local Char = LocalPlayer.CharacterAdded:Wait()
+        WaitForChild(Char, "HumanoidRootPart").CFrame = OldPos
+        
+        -- Tools wapas collect karna
+        for _, v in next, Tools do
+            if v:FindFirstChild("Handle") then
+                firetouchinterest(v.Handle, GetRoot(), 0)
+                firetouchinterest(v.Handle, GetRoot(), 1)
+            end
+        end
+        AmountDuped = AmountDuped + 1
+    end
+    return "Successfully duped tools! Ab Brookhaven hilayenge!"
+end)
+-- [[ ZAYN HUB - REJOIN DUPE & CONTROL ]] --
+
+AddCommand("dupetools2", {"rejoindupe", "dupe2"}, "Faster rejoin-based tool dupe", {1,"1"}, function(Caller, Args)
+    local Amount = tonumber(Args[1])
+    if (not Amount) then return "Bhai, amount toh batao!" end
+    
+    local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
+    if (not queue_on_teleport) then
+        return "Aapka exploit 'queue_on_teleport' support nahi karta!"
+    end
+
+    local Root, Humanoid = GetRoot(), GetHumanoid();
+    local OldPos = Root.CFrame
+    
+    -- Zayn Bypass: Anti-detection height
+    Root.CFrame = CFrame.new(0, 2e5, 0);
+    UnequipTools(Humanoid);
+
+    local Tools = filter(GetChildren(LocalPlayer.Backpack), function(i, v)
+        return IsA(v, "Tool");
+    end)
+
+    local Char, Workspace = GetCharacter(), Services.Workspace
+    for _, v in next, Tools do
+        v.Parent = Char
+        v.Parent = Workspace -- Drop tools to world
+    end
+
+    -- Zayn Hub File System (Purana Fates Admin hta diya)
+    if not isfolder("zayn-hub") then makefolder("zayn-hub") end
+    writefile("zayn-hub/tooldupe.txt", tostring(Amount - 1));
+    
+    -- Auto-Rejoin Script Logic
+    writefile("zayn-hub/tooldupe.lua", format([[
+        local OldPos = CFrame.new(%s);
+        local DupeAmount = tonumber(readfile("zayn-hub/tooldupe.txt"));
+        local game = game
+        local Players = game:GetService("Players");
+        local Workspace = game:GetService("Workspace");
+        local TeleportService = game:GetService("TeleportService");
+        
+        local LocalPlayer = Players.LocalPlayer or Players:GetPropertyChangedSignal("LocalPlayer"):Wait();
+        local Char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait();
+        local RootPart = Char:WaitForChild("HumanoidRootPart");
+
+        if (DupeAmount <= 1) then
+            -- Collect tools after rejoin
+            for _, v in next, Workspace:GetChildren() do
+                if v:IsA("Tool") then
+                    local Handle = v:WaitForChild("Handle", 0.5);
+                    if Handle then
+                        firetouchinterest(Handle, RootPart, 0);
+                        firetouchinterest(Handle, RootPart, 1);
+                    end
+                end
+            end
+            delfile("zayn-hub/tooldupe.txt");
+            delfile("zayn-hub/tooldupe.lua");
+            
+            -- Wapas Zayn Hub load karna
+            -- [Loadstring for your main Zayn Hub script]
+            RootPart.CFrame = OldPos
+        else
+            -- Continue Duping
+            RootPart.CFrame = CFrame.new(0, 2e5, 0);
+            task.wait(0.3);
+            for _, v in next, LocalPlayer.Backpack:GetChildren() do
+                v.Parent = Char
+                v.Parent = Workspace
+            end
+            writefile("zayn-hub/tooldupe.txt", tostring(DupeAmount - 1));
+            local qot = syn and syn.queue_on_teleport or queue_on_teleport
+            qot(readfile("zayn-hub/tooldupe.lua"));
+            TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId);
+        end
+    ]], tostring(OldPos)));
+
+    local TeleportService = Services.TeleportService
+    queue_on_teleport(readfile("zayn-hub/tooldupe.lua"));
+    TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId);
+end)
+
+-- Command: Stop Dupe
+AddCommand("stopdupe", {"sd"}, "Stops any active dupe process", {}, function()
+    local DupeEnv = LoadCommand("dupetools").CmdEnv
+    if (not next(DupeEnv)) then
+        return "Bhai, abhi koi tool dupe nahi ho raha hai."
+    end
+    
+    DupeEnv[1] = false
+    DisableAllCmdConnections("dupetools");
+    return "Tool dupe process ko rok diya gaya hai."
+end)
+-- [[ ZAYN HUB - TOOL UTILITIES ]] --
+
+-- Command: SaveTools (Anti-Loss Bypass)
+AddCommand("savetools", {"st"}, "Saves tools for erennn0779", {1,3}, function(Caller, Args)
+    local Hum = GetHumanoid()
+    UnequipTools(Hum)
+    local Tools = GetChildren(LocalPlayer.Backpack)
+    local Char = GetCharacter()
+    
+    -- Tools ko workspace mein spoof karke save karna
+    for _, v in next, Tools do
+        if v:IsA("Tool") then
+            SpoofProperty(v, "Parent")
+            v.Parent = Char
+            v.Parent = Services.Workspace
+            firetouchinterest(WaitForChild(Services.Workspace, v.Name).Handle, GetRoot(), 0)
+            task.wait()
+            firetouchinterest(v.Handle, GetRoot(), 1)
+            WaitForChild(Char, v.Name).Parent = LocalPlayer.Backpack
+        end
+    end
+    
+    Utils.Notify("ZAYN HUB", "Master, aapke tools save ho chuke hain!")
+    
+    -- Death recovery logic
+    CThread(function()
+        CWait(Hum.Died)
+        task.wait(Players.RespawnTime - 0.2)
+        for _, v in next, Tools do
+            if v:IsA("Tool") and v:FindFirstChild("Handle") then
+                v.Parent = Services.Workspace
+            end
+        end
+        
+        local NewChar = CWait(LocalPlayer.CharacterAdded)
+        local NewRoot = WaitForChild(NewChar, "HumanoidRootPart")
+        task.wait(0.5)
+        for _, v in next, Tools do
+            if v:FindFirstChild("Handle") then
+                firetouchinterest(v.Handle, NewRoot, 0)
+                task.wait()
+                firetouchinterest(v.Handle, NewRoot, 1)
+            end
+        end
+        Utils.Notify("ZAYN HUB", "Tools recovered, Master Zayn!")
+    end)
+end)
+
+-- Command: GiveTools (Humanoid Bypass Transfer)
+AddCommand("givetools", {"gt"}, "Gives all tools to target", {3,1,"1"}, function(Caller, Args)
+    local Target = GetPlayer(Args[1])
+    local OldPos = GetRoot().CFrame
+    
+    -- Humanoid Swapping Bypass
+    local Humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    Humanoid.Name = "1"
+    local Humanoid2 = Clone(Humanoid)
+    Humanoid2.Parent = LocalPlayer.Character
+    Humanoid2.Name = "Humanoid"
+    Services.Workspace.Camera.CameraSubject = Humanoid2
+    task.wait()
+    Destroy(Humanoid)
+    
+    local Char = GetCharacter()
+    for _, v in next, Target do
+        local TRoot = GetRoot(v)
+        for _, tool in next, GetChildren(LocalPlayer.Backpack) do
+            if tool:IsA("Tool") then
+                tool.Parent = Char
+                CFrameTool(tool, TRoot.CFrame)
+                for i = 1, 3 do
+                    if TRoot and tool:FindFirstChild("Handle") then
+                        firetouchinterest(TRoot, tool.Handle, 0)
+                        firetouchinterest(TRoot, tool.Handle, 1)
+                    end
+                end
+            end
+        end
+    end
+    
+    task.wait(0.2)
+    Destroy(Char)
+    local NewChar = CWait(LocalPlayer.CharacterAdded)
+    WaitForChild(NewChar, "HumanoidRootPart").CFrame = OldPos
+    return "Tools transferred successfully!"
+end)
+-- [[ ZAYN HUB - COMMAND CUSTOMIZATION ]] --
+
+-- Command: AddAlias (Apne khud ke shortcut banao)
+AddCommand("addalias", {"newalias"}, "Adds a custom alias to a command", {}, function(Caller, Args)
+    local Command = Args[1]
+    local Alias = Args[2]
+    
+    if (CommandsTable[Command]) then
+        local CmdData = CommandsTable[Command]
+        CommandsTable[Alias] = CmdData
+        
+        -- Zayn Hub Config Sync
+        local CurrentAliases = GetConfig().Aliases or {}
+        CurrentAliases[Command] = CurrentAliases[Command] or {}
+        table.insert(CurrentAliases[Command], Alias)
+        
+        SetConfig({Aliases = CurrentAliases})
+        return string.format("Master Zayn, ab '%s' bhi '%s' ki tarah kaam karega!", Alias, Command)
+    else
+        return Command .. " valid command nahi hai, Zayn!"
+    end
+end)
+
+-- Command: RemoveAlias (Shortcuts delete karne ke liye)
+AddCommand("removealias", {"delalias"}, "Removes a custom alias", {}, function(Caller, Args)
+    local Command = Args[1]
+    local Alias = Args[2]
+    
+    if (not CommandsTable[Command]) then return "Command nahi mila!" end
+    if (not CommandsTable[Alias]) then return "Alias nahi mila!" end
+
+    -- Safety Check: Real command delete na ho jaye
+    if (CommandsTable[Alias].Name ~= Alias) then
+        CommandsTable[Alias] = nil
+        return "Alias '" .. Alias .. "' ko Zayn Hub se hata diya gaya hai."
+    end
+    return "Bhai, aap asli command ko delete nahi kar sakte!"
+end)
+
+-- [[ ZAYN HUB - MONITORING SYSTEM ]] --
+
+-- Command: ChatLogs (Saari chats monitor karne ke liye)
+AddCommand("chatlogs", {"clogs", "spy"}, "Enables the Zayn Chat Spy", {}, function()
+    -- Zayn UI Logic for ChatLogs
+    ChatLogs.Visible = true
+    local List = ChatLogs.Frame.List
+    Utils.ClearAllObjects(List)
+    
+    -- Smooth Tweening for High Aura Look
+    local Tween = Utils.TweenAllTransToObject(ChatLogs, .25, ChatLogsTransparencyClone)
+    
+    -- Auto-Scroll Logic for New Messages
+    local Layout = List.UIListLayout
+    CConnect(Layout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
+        if (List.CanvasSize.Y.Offset - List.AbsoluteSize.Y - List.CanvasPosition.Y < 20) then
+           task.wait() 
+           List.CanvasPosition = Vector2.new(0, List.CanvasSize.Y.Offset + 1000)
+        end
+    end)
+
+    Utils.Notify("ZAYN HUB", "Chat Spy Active: Ab koi aap se chup nahi sakta!")
+end)
+-- [[ ZAYN HUB - GLOBAL & HTTP MONITORING ]] --
+
+-- Command: GlobalChatLogs (Duniya bhar ki chats ke liye)
+AddCommand("globalchatlogs", {"globalclogs", "gspy"}, "Enables Zayn Global Spy", {}, function()
+    -- Identity Lock for erennn0779
+    local IsMaster = (LocalPlayer.Name == "erennn0779")
+    
+    GlobalChatLogs.Visible = true
+    local List = GlobalChatLogs.Frame.List
+    Utils.ClearAllObjects(List)
+    
+    -- Smooth UI Transition
+    Utils.TweenAllTransToObject(GlobalChatLogs, .25, GlobalChatLogsTransparencyClone)
+
+    -- Auto-Scroll Logic
+    local Layout = List.UIListLayout
+    CConnect(Layout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
+        if (List.CanvasSize.Y.Offset - List.AbsoluteSize.Y - List.CanvasPosition.Y < 20) then
+           task.wait()
+           List.CanvasPosition = Vector2.new(0, List.CanvasSize.Y.Offset + 1000)
+        end
+    end)
+
+    _L.GlobalChatLogsEnabled = true
+    
+    -- Zayn Private Socket Logic (Placeholder for your own server)
+    -- Purana fate0 server hta diya hai safety ke liye
+    Utils.Notify("ZAYN HUB", "Global Chat connected. Monitoring all Zayn Hub users...")
+end)
+
+-- Command: HttpLogs (HTTP Request Monitor)
+AddCommand("httplogs", {"httpspy", "hspy"}, "Monitors all web requests", {}, function()
+    HttpLogs.Visible = true
+    local List = HttpLogs.Frame.List
+    
+    -- UI Refresh
+    Utils.ClearAllObjects(List)
+    Utils.TweenAllTransToObject(HttpLogs, .25, HttpLogsTransparencyClone)
+
+    for _, v in next, List:GetChildren() do
+        if not v:IsA("UIListLayout") then
+            Utils.Tween(v, "Sine", "Out", .25, { TextTransparency = 0 })
+        end
+    end
+    
+    Utils.Notify("ZAYN HUB", "HTTP Spy Active. Zayn is watching the traffic!")
+end)
+-- [[ ZAYN HUB - HTTP SPY & BUILDING TOOLS ]] --
+
+-- Command: HttpSpy (Deep Hooking for erennn0779)
+AddCommand("httplogs", {"httpspy", "hspy"}, "Enables Deep HTTP Monitoring", {}, function()
+    local List = HttpLogs.Frame.List
+    Utils.Notify("ZAYN HUB", "HttpSpy Loading... Master Zayn is now watching the traffic.")
+
+    -- Internal Hooking Logic
+    local AddLog = function(reqType, url, Req)
+        if (getgenv().ZAYN_HUB and UI) then
+            local Log = Clone(ChatLogMessage)
+            local Timestamp = os.date("%X")
+            Log.Text = string.format("%s Detected (%s)\nUrl: %s%s", 
+                reqType, Timestamp, url, 
+                Req and "\nPayload: " .. Req or ""
+            )
+            Log.RichText = true
+            Log.Parent = List
+            Utils.Tween(Log, "Sine", "Out", .25, {TextTransparency = 0})
+            List.CanvasSize = UDim2.fromOffset(0, List.UIListLayout.AbsoluteContentSize.Y)
+        end
+    end
+
+    -- Hooking syn.request / request
+    local RawRequest;
+    RawRequest = hookfunction(syn and syn.request or request, newcclosure(function(reqtbl)
+        AddLog(syn and "syn.request" or "request", reqtbl.Url, HttpService:JSONEncode(reqtbl))
+        return RawRequest(reqtbl)
+    end))
+
+    -- Hooking game.HttpGet
+    local RawHttpGet;
+    RawHttpGet = hookfunction(game.HttpGet, newcclosure(function(self, url)
+        AddLog("HttpGet", url)
+        return RawHttpGet(self, url)
+    end))
+
+    -- Hooking game.HttpPost
+    local RawHttpPost;
+    RawHttpPost = hookfunction(game.HttpPost, newcclosure(function(self, url)
+        AddLog("HttpPost", url)
+        return RawHttpPost(self, url)
+    end))
+
+    return "Zayn HttpSpy Loaded!"
+end)
+
+-- Command: BTools (Client-Sided Build Tools)
+AddCommand("btools", {"buildingtools"}, "Gives Building Tools", {3}, function(Caller, Args)
+    local BP = LocalPlayer.Backpack
+    for i = 1, 4 do
+        local Bin = Instance.new("HopperBin")
+        Bin.BinType = i
+        Bin.Parent = BP
+    end
+    return "Zayn BTools Loaded (Client-Sided)!"
+end)
+-- [[ ZAYN HUB - CHAT & SOCIAL MODULE ]] --
+
+-- Command: Spam (Master Zayn's Chat Spam)
+AddCommand("spam", {"spamchat", "spamc"}, "Spams a message", {"1"}, function(Caller, Args, CEnv)
+    local WaitTime = CEnv.WaitTime or tonumber(Args[#Args]) or 1
+    if tonumber(Args[#Args]) then
+        table.remove(Args, #Args)
+    end
+    
+    local Message = table.concat(Args, " ")
+    CEnv.Spamming = true
+    CEnv.WaitTime = WaitTime
+    
+    local ChatRemote = Services.ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+    
+    task.spawn(function()
+        while CEnv.Spamming do
+            ChatRemote:FireServer(Message, "All")
+            task.wait(CEnv.WaitTime)
+        end
+    end)
+    return string.format("Spamming: %s (Delay: %0.1fs)", Message, CEnv.WaitTime)
+end)
+
+-- Command: Silent Chat (Ghost Messages)
+-- Isse chat window mein kuch nahi dikhega, lekin .Chatted signals fire honge
+AddCommand("silentchat", {"schat"}, "Sends a hidden chat message", {"1"}, function(Caller, Args)
+    local toChat = table.concat(Args, " ")
+    Services.Players:Chat(toChat)
+    return "Silent Chatted: " .. toChat
+end)
+
+-- Command: Advertise (Zayn Hub Branding)
+AddCommand("advertise", {"ad"}, "Promotes Zayn Hub in-game", {}, function()
+    local ChatRemote = Services.ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+    -- Purana Fates link hta diya gaya hai
+    ChatRemote:FireServer("ZAYN HUB ON TOP! Get the best Brookhaven scripts now.", "All")
+end)
+
+-- Command: Stop Spam
+AddCommand("unspam", {"stopspam"}, "Stops all chat spam", {}, function()
+    local S1 = LoadCommand("spam").CmdEnv
+    local S2 = LoadCommand("spamsilentchat").CmdEnv
+    
+    if not S1.Spamming and not next(S2) then
+        return "Master Zayn, abhi koi spamming nahi ho rahi hai."
+    end
+    
+    S1.Spamming = false
+    DisableAllCmdConnections("spamsilentchat")
+    return "Spamming rok di gayi hai!"
+end)
+-- [[ ZAYN HUB - SERVER UTILITY ]] --
+
+-- Command: ServerHop (Naye server mein jaane ke liye)
+AddCommand("serverhop", {"sh", "hop"}, "Switches servers (min/max players)", {{"min", "max"}}, function(Caller, Args)
+    if (Caller == LocalPlayer) then
+        Utils.Notify(LocalPlayer, "ZAYN HUB", "Looking for best servers...");
+        
+        local order = "Desc"
+        local Option = string.lower(Args[1] or "max")
+        
+        if Option == "min" then
+            order = "Asc"
+        end
+
+        local Server;
+        local url = string.format("https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=%s&limit=100", game.PlaceId, order)
+        local starting = tick()
+        
+        repeat
+            local success, result = pcall(function()
+                return game:HttpGet(url)
+            end)
+            
+            if (not success) then
+                task.wait(2)
+                continue
+            end
+            
+            local decoded = Services.HttpService:JSONDecode(result)
+            if (decoded and decoded.data and #decoded.data ~= 0) then
+                for _, v in pairs(decoded.data) do
+                    if (v.maxPlayers and v.playing and v.maxPlayers > v.playing and v.id ~= game.JobId) then
+                        Server = v
+                        break
+                    end
+                end
+            end
+            
+            if (Server) then break end
+            
+            if decoded.nextPageCursor then
+                url = string.format("https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=%s&limit=100&cursor=%s", game.PlaceId, order, decoded.nextPageCursor)
+            else
+                break
+            end
+        until tick() - starting >= 10 -- Timeout shortened for efficiency
+
+        if (not Server) then
+            return "Bhai, koi sahi server nahi mila!"
+        end
+
+        -- Zayn Hub Persistent Loading (Teleport ke baad bhi load hoga)
+        local queue_on_teleport = syn and syn.queue_on_teleport or queue_on_teleport
+        if (queue_on_teleport) then
+            -- Yahan aapka apna Zayn Hub loadstring aayega
+            queue_on_teleport([[
+                repeat task.wait() until game:IsLoaded()
+                print("Zayn Hub Re-Loaded on erennn0779's command!")
+            ]])
+        end
+
+        Services.TeleportService:TeleportToPlaceInstance(game.PlaceId, Server.id)    
+        return string.format("Joining server (%d/%d players)... Chalo Zayn bhai!", Server.playing, Server.maxPlayers)
+    end
+end)
+-- [[ ZAYN HUB - PERMISSIONS & SYSTEM CONTROL ]] --
+
+-- Command: Whitelist (Doston ko commands use karne dene ke liye)
+AddCommand("whitelist", {"wl"}, "Whitelists a user for Zayn Hub", {"1"}, function(Caller, Args)
+    local Target = GetPlayer(Args[1])
+    for _, v in next, Target do
+        if not table.find(AdminUsers, v) then
+            table.insert(AdminUsers, v)
+            Utils.Notify(v, "ZAYN HUB", "Master Zayn has whitelisted you!")
+        end
+    end
+    return "Users whitelisted successfully."
+end)
+
+-- Command: Exceptions (Aapke doston ko 'Kill All' se bachane ke liye)
+AddCommand("exceptions", {"ex"}, "Blocks user from being targeted by bulk commands", {"1"}, function(Caller, Args)
+    local Target = GetPlayer(Args[1])
+    for _, v in next, Target do
+        table.insert(Exceptions, v)
+        Utils.Notify(Caller, "ZAYN HUB", v.Name .. " is now safe from your commands.")
+    end
+end)
+
+-- Command: Commands UI (Saari commands ek list mein dekhne ke liye)
+AddCommand("commands", {"cmds", "help"}, "Shows Zayn Hub command list", {}, function()
+    if (not CommandsLoaded) then
+        local List = Commands.Frame.List
+        Utils.SmoothScroll(List, .14)
+        for _, v in next, CommandsTable do
+            if not List:FindFirstChild(v.Name) then
+                local Entry = Clone(CommandTemplate)
+                Entry.CommandText.Text = v.Name .. (#v.Aliases > 0 and " (" .. table.concat(v.Aliases, ", ") .. ")" or "")
+                Entry.Name = v.Name
+                Entry.Visible = true
+                Entry.Parent = List
+                -- High Aura Tooltip
+                Utils.ToolTip(Entry, v.Name .. ": " .. v.Description)
+            end
+        end
+        CommandsLoaded = true
+    end
+    Commands.Visible = true
+    Utils.TweenAllTransToObject(Commands, .25, CommandsTransparencyClone)
+    return "Zayn Hub Command Menu Loaded!"
+end)
+
+-- Command: KillScript (Script ko puri tarah band karne ke liye)
+AddCommand("killscript", {"exit"}, "Kills Zayn Hub and cleans up", {}, function(Caller)
+    if (Caller == LocalPlayer) then
+        Utils.Notify(LocalPlayer, "ZAYN HUB", "Shutting down... Goodbye, Master Zayn.")
+        task.wait(1)
+        
+        -- Cleaning up all Bypasses & Hooks
+        for _, connection in next, Connections do
+            if connection.Disconnect then connection:Disconnect() end
+        end
+        
+        if UI then UI:Destroy() end
+        getgenv().ZAYN_HUB = nil
+        
+        -- Restoring Game State
+        setreadonly(mt, false)
+        mt = OldMetaMethods
+        setreadonly(mt, true)
+    end
+end)
+-- [[ ZAYN HUB - SYSTEM OVERRIDES ]] --
+
+-- Command: ClientBypass (Anti-Cheat Stealth)
+AddCommand("bypass", {"clientbypass", "cbp"}, "Client-sided bypass for anti-cheats", {3}, function()
+    -- Identity Check for erennn0779
+    local IsMaster = (LocalPlayer.Name == "erennn0779")
+    
+    AddConnection(CConnect(LocalPlayer.CharacterAdded, function(Char)
+        local Hum = WaitForChild(Char, "Humanoid")
+        task.wait(0.4)
+        
+        -- Zayn Stealth: Humanoid aur Root ko game se chhupana
+        SpoofInstance(Hum)
+        local MainPart = isR6() and Char:WaitForChild("Torso") or Char:WaitForChild("UpperTorso")
+        SpoofInstance(GetRoot(), MainPart)
+        
+        ProtectInstance(GetRoot())
+        ProtectInstance(Hum)
+    end))
+
+    local Char = GetCharacter()
+    if Char then Char:BreakJoints() end -- Character refresh for bypass to kick in
+
+    -- Dynamic Command Re-routing (Safe TP)
+    CommandsTable["goto"].Function = CommandsTable["tweento"].Function
+    CommandsTable["to"].Function = CommandsTable["tweento"].Function
+    
+    return "Zayn Bypass Enabled: Ab aap detection se bahar hain!"
+end)
+
+-- Command: Shiftlock (Force enable shiftlock)
+AddCommand("shiftlock", {"slock"}, "Enables shiftlock for Master Zayn", {}, function()
+    if (LocalPlayer.DevEnableMouseLock) then
+        return "Shiftlock pehle se hi on hai, Master Zayn!"
+    end
+    
+    LocalPlayer.DevEnableMouseLock = true
+    return "Shiftlock enabled! Combat ke liye taiyaar."
+end)
+-- [[ ZAYN HUB - UI CONTROLLER ]] --
+
+-- Initial State: Saare windows ko hidden aur transparent rakhna starting mein
+Notification.Visible = false
+Utils.SetAllTrans(CommandBar);
+Utils.SetAllTrans(ChatLogs);
+Utils.SetAllTrans(GlobalChatLogs);
+Utils.SetAllTrans(HttpLogs);
+Utils.SetAllTrans(Console);
+
+-- Window Visibility Setup
+local Windows = {Commands, ChatLogs, Console, GlobalChatLogs, HttpLogs}
+for _, Win in next, Windows do 
+    Win.Visible = false 
+    Utils.Draggable(Win) -- Sabhi windows ab move ho sakti hain
+end
+
+-- [[ COMMAND BAR LOGIC - PRECISE FOR erennn0779 ]] --
+local Times = #LastCommand
+AddConnection(CConnect(Services.UserInputService.InputBegan, function(Input, GameProccesed)
+    -- Prefix Trigger
+    if (Input.KeyCode == CommandBarPrefix and (not GameProccesed)) then
+        CommandBarOpen = not CommandBarOpen
+        local TweenFunc = CommandBarOpen and Utils.TweenAllTransToObject or Utils.TweenAllTrans
+        TweenFunc(CommandBar, .5, CommandBarTransparencyClone);
+
+        if (CommandBarOpen) then
+            CommandBar.Input:CaptureFocus()
+            task.spawn(function()
+                task.wait()
+                CommandBar.Input.Text = "" -- Clear on open
+            end)
+            -- Position animation (Slide Up)
+            Utils.Tween(CommandBar, "Quint", "Out", .5, {
+                Position = UDim2.new(0.5, WideBar and -200 or -100, 1, -110)
+            })
+        else
+            -- Position animation (Slide Down)
+            Utils.Tween(CommandBar, "Quint", "Out", .5, {
+                Position = UDim2.new(0.5, WideBar and -200 or -100, 1, 5)
+            })
+        end
+
+    -- New Prefix Selection
+    elseif (not GameProccesed and ChooseNewPrefix) then
+        CommandBarPrefix = Input.KeyCode
+        local PrefixName = tostring(Input.KeyCode):split(".")[3]
+        Utils.Notify("ZAYN HUB", "Master, naya prefix set ho gaya: " .. PrefixName);
+        ChooseNewPrefix = false
+
+    -- Command History (Up/Down Arrow Keys)
+    elseif (GameProccesed and CommandBarOpen) then
+        if (Input.KeyCode == Enum.KeyCode.Up) then
+            Times = math.clamp(Times + 1, 1, #LastCommand)
+            CommandBar.Input.Text = LastCommand[Times][1] .. " "
+        elseif (Input.KeyCode == Enum.KeyCode.Down) then
+            Times = math.clamp(Times - 1, 1, #LastCommand)
+            CommandBar.Input.Text = LastCommand[Times][1] .. " "
+        end
+    end
+end), Connections.UI, true);
+
+-- [[ SEARCH & FILTER LOGIC ]] --
+AddConnection(CConnect(Commands.Search:GetPropertyChangedSignal("Text"), function()
+    local Text = string.lower(Commands.Search.Text)
+    for _, v in next, Commands.Frame.List:GetChildren() do
+        if v:IsA("Frame") then
+            v.Visible = string.find(string.lower(v.CommandText.Text), Text, 1, true) ~= nil
+        end
+    end
+end), Connections.UI, true);
+
+-- Close Button Tweens
+local function SetupClose(Win)
+    AddConnection(CConnect(Win.Close.MouseButton1Click, function()
+        local Tween = Utils.TweenAllTrans(Win, .25)
+        Tween.Completed:Wait()
+        Win.Visible = false
+    end), Connections.UI, true)
+end
+
+SetupClose(Commands)
+SetupClose(ChatLogs)
+SetupClose(HttpLogs)
+SetupClose(Console)
+-- [[ ZAYN HUB - LOGS & ARCHIVE SYSTEM ]] --
+
+-- Console Filtering (Hide/Show specific log types)
+Do
+    local ShowWarns, ShowErrors, ShowOutput = true, true, true
+    
+    -- Filter Warns
+    AddConnection(CConnect(Console.Warns.MouseButton1Click, function()
+        ShowWarns = not ShowWarns
+        for _, v in next, Console.Frame.List:GetChildren() do
+            if not v:IsA("UIListLayout") and v.Name:sub(1,1) == "W" then
+                v.Visible = ShowWarns
+            end
+        end
+        Console.Warns.Text = ShowWarns and "Hide Warns" or "Show Warns"
+        Console.Frame.List.CanvasSize = UDim2.fromOffset(0, Console.Frame.List.UIListLayout.AbsoluteContentSize.Y)
+    end), Connections.UI, true)
+
+    -- Filter Errors
+    AddConnection(CConnect(Console.Errors.MouseButton1Click, function()
+        ShowErrors = not ShowErrors
+        for _, v in next, Console.Frame.List:GetChildren() do
+            if not v:IsA("UIListLayout") and v.Name:sub(1,1) == "E" then
+                v.Visible = ShowErrors
+            end
+        end
+        Console.Errors.Text = ShowErrors and "Hide Errors" or "Show Errors"
+    end), Connections.UI, true)
+end
+
+-- [[ UNIVERSAL SEARCH LOGIC ]] --
+local function SetupLogSearch(LogUI)
+    AddConnection(CConnect(LogUI.Search:GetPropertyChangedSignal("Text"), function()
+        local Query = LogUI.Search.Text:lower()
+        for _, v in next, LogUI.Frame.List:GetChildren() do
+            if not v:IsA("UIListLayout") then
+                v.Visible = v.Text:lower():find(Query, 1, true) ~= nil
+            end
+        end
+        LogUI.Frame.List.CanvasSize = UDim2.fromOffset(0, LogUI.Frame.List.UIListLayout.AbsoluteContentSize.Y)
+    end), Connections.UI, true)
+end
+
+SetupLogSearch(ChatLogs)
+SetupLogSearch(GlobalChatLogs)
+SetupLogSearch(HttpLogs)
+SetupLogSearch(Console)
+
+-- [[ AUTO-SAVE SYSTEM (Zayn Folder Structure) ]] --
+AddConnection(CConnect(ChatLogs.Save.MouseButton1Click, function()
+    local GameName = Services.MarketplaceService:GetProductInfo(game.PlaceId).Name
+    local Timestamp = os.date("%Y-%m-%d_%H-%M-%S")
+    local FilePath = string.format("zayn-hub/chatlogs/%s_%s.txt", GameName, Timestamp)
+    
+    local Content = string.format("Zayn Hub Chatlogs | Game: %s | Date: %s\n\n", GameName, os.date())
+    for _, v in next, ChatLogs.Frame.List:GetChildren() do
+        if not v:IsA("UIListLayout") then
+            Content = Content .. v.Text .. "\n"
+        end
+    end
+    
+    if not isfolder("zayn-hub/chatlogs") then makefolder("zayn-hub/chatlogs") end
+    writefile(FilePath, Content)
+    Utils.Notify("ZAYN HUB", "Master, chat logs save ho chuke hain!")
+end), Connections.UI, true)
+-- [[ ZAYN HUB - LOG SAVING SYSTEM ]] --
+
+-- HTTP Logs Save Logic
+AddConnection(CConnect(HttpLogs.Save.MouseButton1Click, function()
+    local Logs = string.format("Zayn Hub HttpLogs | Date: %s\n\n", os.date())
+    for _, v in next, HttpLogs.Frame.List:GetChildren() do
+        if not v:IsA("UIListLayout") then
+            Logs = Logs .. v.Text .. "\n"
+        end
+    end
+    
+    if not isfolder("zayn-hub/httplogs") then makefolder("zayn-hub/httplogs") end
+    local FileName = string.format("zayn-hub/httplogs/HttpLogs_%s.txt", os.date("%H-%M-%S"):gsub(":", "-"))
+    writefile(FileName, Logs:gsub("%b<>", "")) -- HTML tags remove karke save karega
+    Utils.Notify("ZAYN HUB", "HTTP Logs save ho gaye hain!")
+end), Connections.UI, true)
+
+-- Console Logs Save Logic
+AddConnection(CConnect(Console.Save.MouseButton1Click, function()
+    local GameName = Services.MarketplaceService:GetProductInfo(game.PlaceId).Name
+    local Timestamp = os.date("%Y-%m-%d %H:%M:%S")
+    local LogString = string.format("Zayn Hub Logs | %s\nGame: %s (%d)\n\n", Timestamp, GameName, game.PlaceId)
+    local LogTypes = { ["P"] = "OUTPUT", ["W"] = "WARNING", ["E"] = "ERROR" }
+    
+    for _, v in next, Console.Frame.List:GetChildren() do
+        if not v:IsA("UIListLayout") then
+            local Prefix = LogTypes[v.Name:sub(1,1)] or "INFO"
+            LogString = LogString .. string.format("[%s] %s\n", Prefix, v.Text)
+        end
+    end
+    
+    writefile("zayn-hub/console_logs.txt", LogString)
+    Utils.Notify("ZAYN HUB", "Console Logs save ho chuke hain, Master!")
+end), Connections.UI, true)
+
+-- [[ COMMAND BAR INTELLIGENCE (Auto-Correct & Prediction) ]] --
+AddConnection(CConnect(CommandBar.Input:GetPropertyChangedSignal("Text"), function()
+    local TextBox = CommandBar.Input
+    local Prediction = TextBox.Predict
+    local RawText = TextBox.Text
+    local Args = RawText:split(" ")
+    
+    Prediction.Text = ""
+    if RawText == "" then return end
+
+    -- Command & Alias Prediction
+    if not CommandsTable[Args[1]] then
+        for _, cmd in next, CommandsTable do
+            if Utils.MatchSearch(Args[1], cmd.Name) then
+                Prediction.Text = cmd.Name
+                CommandArgs = cmd.Args or {}
+                break
+            end
+            for _, alias in next, cmd.Aliases do
+                if Utils.MatchSearch(Args[1], alias) then
+                    Prediction.Text = alias
+                    CommandArgs = cmd.Args or {}
+                    break
+                end
+            end
+        end
+    end
+
+    -- Player & Argument Prediction (Space detect hone par)
+    for i, arg in next, Args do
+        if i > 1 and arg ~= "" then
+            local PredictResult = ""
+            -- Agar command ko "Player" argument chahiye toh Player list se match karo
+            if CommandArgs[i-1] and CommandArgs[i-1]:lower() == "player" then
+                PredictResult = Utils.GetPlayerArgs(arg) or PredictResult
+            else
+                -- Normal argument prediction
+                PredictResult = Utils.GetPlayerArgs(arg) or PredictResult
+            end
+            
+            -- Prediction text ko build karna
+            local BaseText = RawText:sub(1, #RawText - #Args[#Args])
+            Prediction.Text = BaseText .. PredictResult
+        end
+    end
+
+    -- TAB Completion Bypass
+    if RawText:find("\t") then
+        TextBox.Text = Prediction.Text:gsub("\t", "")
+        TextBox.CursorPosition = #TextBox.Text + 1
+    end
+end))
+-- [[ ZAYN HUB - ROBLOX CHAT PREDICTION ]] --
+
+Do
+    local Enabled = false
+    local PredictionConnection;
+    local PredictLabel;
+
+    ToggleChatPrediction = function()
+        if (_L.Frame2 and Enabled) then
+            -- Disconnect logic
+            if PredictionConnection then PredictionConnection:Disconnect() end
+            if PredictLabel then PredictLabel:Destroy() end
+            _L.Frame2 = nil
+            Enabled = false
+            return
+        end
+
+        -- Roblox Standard Chat Bar find karna
+        local RobloxChat = LocalPlayer.PlayerGui:FindFirstChild("Chat")
+        local ChatBar;
+        
+        if RobloxChat then
+            local BoxFrame = RobloxChat:FindFirstChild("BoxFrame", true)
+            if BoxFrame then
+                _L.Frame2 = BoxFrame:FindFirstChild("Frame")
+                if _L.Frame2 then
+                    local SourceLabel = _L.Frame2:FindFirstChild("TextLabel")
+                    ChatBar = _L.Frame2:FindFirstChild("ChatBar")
+                    
+                    if SourceLabel and ChatBar then
+                        -- Prediction Label Create karna (Ghost Text style)
+                        PredictLabel = Instance.new("TextLabel")
+                        PredictLabel.Name = "ZaynPredict"
+                        PredictLabel.Size = UDim2.new(1, 0, 1, 0)
+                        PredictLabel.BackgroundTransparency = 1
+                        PredictLabel.TextTransparency = 0.4 -- Ghost effect
+                        PredictLabel.TextColor3 = SourceLabel.TextColor3
+                        PredictLabel.Font = SourceLabel.Font
+                        PredictLabel.TextSize = SourceLabel.TextSize
+                        PredictLabel.TextXAlignment = SourceLabel.TextXAlignment
+                        PredictLabel.Text = ""
+                        PredictLabel.Parent = _L.Frame2
+                    end
+                end
+            end
+        end
+
+        if not ChatBar then return end
+
+        -- Prediction Logic
+        PredictionConnection = ChatBar:GetPropertyChangedSignal("Text"):Connect(function()
+            local RawText = ChatBar.Text
+            PredictLabel.Text = ""
+
+            -- Agar text prefix se start nahi ho raha toh ignore karo
+            if not RawText:match("^" .. Prefix) then return end
+
+            local Args = RawText:split(" ")
+            local CommandPart = Args[1]:sub(#Prefix + 1) -- Remove prefix for matching
+
+            -- Command/Alias Matcher
+            for _, cmd in next, CommandsTable do
+                if Utils.MatchSearch(CommandPart, cmd.Name) then
+                    PredictLabel.Text = Prefix .. cmd.Name
+                    CommandArgs = cmd.Args or {}
+                    break
+                end
+                for _, alias in next, cmd.Aliases do
+                    if Utils.MatchSearch(CommandPart, alias) then
+                        PredictLabel.Text = Prefix .. alias
+                        CommandArgs = cmd.Args or {}
+                        break
+                    end
+                end
+            end
+
+            -- Player Argument Matching (Space ke baad)
+            if #Args > 1 then
+                local CurrentArg = Args[#Args]
+                if CurrentArg ~= "" then
+                    local PlayerMatch = Utils.GetPlayerArgs(CurrentArg)
+                    if PlayerMatch then
+                        local BaseText = RawText:sub(1, #RawText - #CurrentArg)
+                        PredictLabel.Text = BaseText .. PlayerMatch
+                    end
+                end
+            end
+
+            -- Tab Completion Bypass (Standard Roblox Chat)
+            if RawText:find("\t") then
+                ChatBar.Text = PredictLabel.Text:gsub("\t", "")
+                ChatBar.CursorPosition = #ChatBar.Text + 1
+            end
+        end)
+
+        Enabled = true
+        Utils.Notify("ZAYN HUB", "Master, Chat Prediction ab active hai!")
+        return ChatBar
+    end
+end
+-- [[ ZAYN HUB - CONFIGURATION & MACRO SYSTEM ]] --
+
+-- Auto-load Chat Prediction if enabled in config
+if (CurrentConfig.ChatPrediction) then
+    task.delay(2, ToggleChatPrediction)
+end
+
+local ConfigUILib = {}
+do
+    local GuiObjects = ConfigElements
+    local SelectedPage
+    local PageCount = 0
+
+    -- Zayn Hub Theme Colors
+    local Colors = {
+        ToggleEnabled = Color3.fromRGB(15, 15, 18); -- Darker High Aura
+        Background = Color3.fromRGB(32, 33, 36);
+        ToggleDisabled = Color3.fromRGB(27, 28, 31);
+    }
+
+    -- Page Creation Logic
+    function ConfigUILib.NewPage(Title)
+        local Page = GuiObjects.Page.Container:Clone()
+        local NavButton = GuiObjects.Page.TextButton:Clone()
+
+        Page.Visible = true
+        NavButton.Visible = true
+        NavButton.Text = Title
+        NavButton.Name = Title
+        
+        Utils.Click(NavButton, "BackgroundColor3")
+            
+        if PageCount == 0 then
+            SelectedPage = Page
+        end
+
+        -- Navigation Logic
+        NavButton.MouseButton1Click:Connect(function()
+            if SelectedPage ~= Page then          
+                SelectedPage = Page
+                ConfigUI.Container.UIPageLayout:JumpTo(SelectedPage)
+            end
+        end)
+        
+        Page.Parent = ConfigUI.Container
+        NavButton.Parent = ConfigUI.Selection
+        PageCount = PageCount + 1
+
+        local PageLibrary = {}
+
+        -- Macro Section (Jaise Keybinds set karna commands ke liye)
+        function PageLibrary.CreateMacroSection(MacrosToAdd, Callback)
+            local Selection = Page.Selection
+            Selection:ClearAllChildren()
+            
+            -- UI elements setup for Macros
+            local MacroUI = GuiObjects.Elements.Macro.MacroPage:Clone()
+            for _, child in next, MacroUI:GetChildren() do
+                child.Parent = Selection
+            end
+            
+            local AddMacro = Selection.AddMacro
+            local BindBtn = AddMacro.Bind
+            local AddBtn = AddMacro.AddMacro
+            local Enabled = false
+            local BindConnection
+
+            -- Keybind Picker Logic
+            BindBtn.MouseButton1Click:Connect(function()
+                Enabled = not Enabled
+                if Enabled then
+                    BindBtn.Text = "..."
+                    -- Temporary shiftlock disable for binding
+                    LocalPlayer.DevEnableMouseLock = false
+                    
+                    BindConnection = Services.UserInputService.InputBegan:Connect(function(Input, GPE)
+                        if not GPE and Input.UserInputType == Enum.UserInputType.Keyboard then
+                            local KeyName = tostring(Input.KeyCode):split(".")[3]
+                            BindBtn.Text = KeyName
+                            Enabled = false
+                            BindConnection:Disconnect()
+                            LocalPlayer.DevEnableMouseLock = true
+                        end
+                    end)
+                end
+            end)
+        end
+        return PageLibrary
+    end
+end
+-- [[ ZAYN HUB - MACRO & TOGGLE SYSTEM ]] --
+
+-- Macro Logic: Commands ko Keybinds se jodna
+function PageLibrary.CreateMacroSection(MacrosToAdd, Callback)
+    -- ... (Pichla setup logic) ...
+    
+    local OnClick = function()
+        Enabled = not Enabled
+        if Enabled then
+            BindA.Text = "..."
+            -- Shiftlock off taaki key capture ho sake
+            LocalPlayer.DevEnableMouseLock = false
+            
+            Connection = AddConnection(CConnect(UserInputService.InputBegan, function(Input, Processed)
+                if not Processed and Input.UserInputType == Enum.UserInputType.Keyboard then
+                    -- Double Key Combination Check (e.g., Ctrl + Key)
+                    local Input2, Proccessed2;
+                    task.spawn(function()
+                        Input2, Proccessed2 = UserInputService.InputBegan:Wait()
+                    end)
+                    UserInputService.InputEnded:Wait()
+                    
+                    if Input2 then
+                        local KeyName1 = GetKeyName(Input.KeyCode)
+                        local KeyName2 = GetKeyName(Input2.KeyCode)
+                        BindA.Text = string.format("%s + %s", KeyName1, KeyName2)
+                        Keybind[1], Keybind[2] = Input.KeyCode, Input2.KeyCode
+                    else
+                        BindA.Text = GetKeyName(Input.KeyCode)
+                        Keybind[1], Keybind[2] = Input.KeyCode, nil
+                    end
+                    LocalPlayer.DevEnableMouseLock = true
+                end
+                Enabled = false
+                if Connection then Connection:Disconnect() end
+            end))
+        end
+    end
+
+    -- Toggle Element: Script Features On/Off karne ke liye
+    function ElementLibrary.Toggle(Title, Enabled, Callback)
+        local Toggle = Clone(GuiObjects.Elements.Toggle)
+        local Container = Toggle.Container
+        local Switch = Container.Switch
+        
+        -- Default State Setup
+        if not Enabled then
+            Switch.Position = UDim2.fromOffset(2, 2)
+            Container.BackgroundColor3 = Colors.ToggleDisabled
+        end
+
+        Toggle.Hitbox.MouseButton1Click:Connect(function()
+            Enabled = not Enabled
+            -- Smooth Animation (High Aura Feel)
+            Utils.Tween(Switch, "Quad", "Out", .25, {
+                Position = Enabled and UDim2.new(1, -18, 0, 2) or UDim2.fromOffset(2, 2)
+            })
+            Utils.Tween(Container, "Quad", "Out", .25, {
+                BackgroundColor3 = Enabled and Colors.ToggleEnabled or Colors.ToggleDisabled
+            })
+            Callback(Enabled)
+        end)
+        
+        Toggle.Title.Text = Title
+        Toggle.Parent = SectionOptions
+    end
+end
+-- [[ ZAYN HUB - INTERACTIVE ELEMENTS ]] --
+
+-- Scrolling Frame: Bulk elements (jaise player lists ya item lists) ke liye
+function ElementLibrary.ScrollingFrame(Title, Callback, Elements, Toggles)
+    local ScrollUI = Clone(GuiObjects.Elements.ScrollingFrame)
+    local Frame = ScrollUI.Frame
+    local Container = Frame.Container
+
+    for ElementTitle, Enabled in next, Elements do
+        local NewToggle = Clone(ScrollUI.Toggle)
+        NewToggle.Visible = true
+        NewToggle.Title.Text = ElementTitle
+        
+        -- Custom Toggle Text (e.g., On/Off or Enabled/Disabled)
+        local OnText = Toggles and Toggles[1] or "Enabled"
+        local OffText = Toggles and Toggles[2] or "Disabled"
+        NewToggle.Plugins.Text = Enabled and OnText or OffText
+
+        Utils.Click(NewToggle.Plugins, "BackgroundColor3")
+
+        AddConnection(CConnect(NewToggle.Plugins.MouseButton1Click, function()
+            Enabled = not Enabled
+            NewToggle.Plugins.Text = Enabled and OnText or OffText
+            Callback(ElementTitle, Enabled) -- Zayn Intelligence: Real-time update
+        end))
+
+        NewToggle.Parent = Container
+    end
+
+    Frame.Visible = true
+    Frame.Title.Text = Title
+    Frame.Parent = Section.Options
+    UpdateClone()
+end
+
+-- Keybind: Keyboard shortcut set karne ke liye (Shift + Key support)
+function ElementLibrary.Keybind(Title, Bind, Callback)
+    local BindUI = Clone(GuiObjects.Elements.Keybind)
+    local Enabled = false
+    local BindLabel = BindUI.Container
+
+    BindLabel.Text = Bind
+    BindUI.Title.Text = Title
+
+    AddConnection(CConnect(BindLabel.MouseButton1Click, function()
+        Enabled = not Enabled
+        if Enabled then
+            BindLabel.Text = "..."
+            local OldShiftLock = LocalPlayer.DevEnableMouseLock
+            LocalPlayer.DevEnableMouseLock = false -- Safety for Master Zayn
+
+            local BindConnection;
+            BindConnection = AddConnection(CConnect(UserInputService.InputBegan, function(Input, Processed)
+                if not Processed and Input.UserInputType == Enum.UserInputType.Keyboard then
+                    -- Combination Key Check
+                    local Key1 = GetKeyName(Input.KeyCode)
+                    BindLabel.Text = Key1
+                    Callback(Input.KeyCode)
+                    
+                    LocalPlayer.DevEnableMouseLock = OldShiftLock
+                    Enabled = false
+                    if BindConnection then BindConnection:Disconnect() end
+                end
+            end))
+        end
+    end))
+
+    BindUI.Parent = Section.Options
+    UpdateClone()
+end
+-- [[ ZAYN HUB - ADVANCED COLOR SYSTEM ]] --
+
+function ElementLibrary.ColorPicker(Title, DefaultColor, Callback)
+    local SelectColor = ColorElements.SelectColor:Clone()
+    local CurrentColor = DefaultColor
+    local Button = SelectColor.Button
+    
+    local H, S, V = DefaultColor:ToHSV()
+    local Opened = false
+    local Rainbow = false
+
+    -- Master Update Logic
+    local function UpdateText()
+        RedTextBox.PlaceholderText = tostring(math.floor(CurrentColor.R * 255))
+        GreenTextBox.PlaceholderText = tostring(math.floor(CurrentColor.G * 255))
+        BlueTextBox.PlaceholderText = tostring(math.floor(CurrentColor.B * 255))
+    end
+
+    local function UpdateColorUI()
+        H, S, V = CurrentColor:ToHSV()
+        SliderBar.Position = UDim2.new(0, 0, H, 2)
+        CanvasBar.Position = UDim2.new(S, 2, 1 - V, 2)
+        
+        -- Zayn Hub Style Gradient
+        ColorGradient.UIGradient.Color = Utils.MakeGradient({
+            [1] = Color3.new(1, 1, 1),
+            [2] = Color3.fromHSV(H, 1, 1)
+        })
+        
+        ColorPreview.BackgroundColor3 = CurrentColor
+        UpdateText()
+    end
+
+    -- Hue Slider Logic (H)
+    local function ColorSliderInit()
+        local Moving = false
+        local function Update()
+            if Opened and not Rainbow then
+                local LowerBound = SliderHitbox.AbsoluteSize.Y
+                local Position = math.clamp(Mouse.Y - SliderHitbox.AbsolutePosition.Y, 0, LowerBound)
+                H = Position / LowerBound
+                
+                CurrentColor = Color3.fromHSV(H, S, V)
+                UpdateColorUI()
+                Callback(CurrentColor)
+            end
+        end
+
+        SliderHitbox.MouseButton1Down:Connect(function() Moving = true Update() end)
+        UserInputService.InputEnded:Connect(function(Input) 
+            if Input.UserInputType == Enum.UserInputType.MouseButton1 then Moving = false end 
+        end)
+        Mouse.Move:Connect(function() if Moving then Update() end end)
+    end
+
+    -- Canvas Logic (Saturation & Value)
+    local function ColorCanvasInit()
+        local Moving = false
+        local function Update()
+            if Opened then
+                local Size = CanvasHitbox.AbsoluteSize
+                local Pos = CanvasHitbox.AbsolutePosition
+                local X = math.clamp(Mouse.X - Pos.X, 0, Size.X) / Size.X
+                local Y = math.clamp(Mouse.Y - Pos.Y, 0, Size.Y) / Size.Y
+                
+                S, V = X, 1 - Y
+                CurrentColor = Color3.fromHSV(H, S, V)
+                UpdateColorUI()
+                Callback(CurrentColor)
+            end
+        end
+        -- Mouse events same as Slider
+    end
+
+    -- Rainbow Toggle (Zayn Aesthetic)
+    RainbowToggle.MouseButton1Click:Connect(function()
+        Rainbow = not Rainbow
+        if Rainbow then
+            task.spawn(function()
+                while Rainbow do
+                    local Tick = tick()
+                    CurrentColor = Color3.fromHSV(Tick % 5 / 5, 1, 1)
+                    UpdateColorUI()
+                    Callback(CurrentColor)
+                    task.wait()
+                end
+            end)
+        end
+    end)
+
+    SelectColor.Title.Text = Title
+    SelectColor.Parent = Section.Options
+    ColorSliderInit()
+    ColorCanvasInit()
+    UpdateColorUI()
+end
+-- [[ ZAYN HUB - THE ULTIMATE INTERFACE ]] --
+
+-- Section Elements Logic
+function ElementLibrary.ColorPicker(Title, DefaultColor, Callback)
+    -- ... [HSV Initialization Logic] ...
+
+    -- RGB Textbox Control: Precise Manual Adjustments
+    local function SetupRGBBox(Box, Component)
+        AddConnection(CConnect(Box.FocusLost, function()
+            if Opened then
+                local Number = tonumber(Box.Text)
+                if Number then
+                    Number = math.clamp(math.floor(Number), 0, 255)
+                    local R, G, B = CurrentColor.R, CurrentColor.G, CurrentColor.B
+                    
+                    if Component == "R" then R = Number/255
+                    elseif Component == "G" then G = Number/255
+                    elseif Component == "B" then B = Number/255 end
+                    
+                    CurrentColor = Color3.new(R, G, B)
+                    UpdateColor()
+                    Box.PlaceholderText = tostring(Number)
+                    Callback(CurrentColor)
+                end
+                Box.Text = ""
+            end
+        end))
+    end
+
+    SetupRGBBox(RedTextBox, "R")
+    SetupRGBBox(GreenTextBox, "G")
+    SetupRGBBox(BlueTextBox, "B")
+
+    -- Zayn Hub Rainbow Engine: Aesthetic High Aura Cycle
+    AddConnection(CConnect(Services.RunService.RenderStepped, function()
+        if Rainbow then
+            local Hue = (tick() / 5) % 1 -- 5 Second complete cycle
+            CurrentColor = Color3.fromHSV(Hue, S, V)
+            
+            if Opened then
+                UpdateHue(Hue) -- Visual slider update
+            end
+            
+            Button.BackgroundColor3 = CurrentColor
+            Callback(CurrentColor, true)
+        end
+    end))
+    
+    -- UI Polish
+    Button.BackgroundColor3 = DefaultColor
+    SelectColor.Title.Text = Title
+    SelectColor.Visible = true
+    SelectColor.Parent = Section.Options
+    Utils.Thing(SelectColor.Title)
+end
+-- [[ ZAYN HUB - CONFIGURATION LOADER ]] --
+
+do
+    local UserInputService = Services.UserInputService
+    
+    -- Utility: KeyCodes ko readable text mein badalna
+    local function GetKeyName(KeyCode)
+        local _, Stringed = pcall(UserInputService.GetStringForKeyCode, UserInputService, KeyCode)
+        local IsEnum = (Stringed == "")
+        return (not IsEnum and _) and Stringed or tostring(KeyCode):split(".")[3]
+    end
+
+    -- Main Config Page Setup
+    LoadConfig = function()
+        local ScriptPage = ConfigUILib.NewPage("Zayn Hub")
+        local SettingsSection = ScriptPage.NewSection("Core Settings")
+        local CurrentConf = GetConfig()
+
+        -- [[ PREFIX CONTROLS ]] --
+        SettingsSection.TextboxKeybind("Chat Prefix", Prefix, function(Key)
+            if (not Key:match("%A") or Key:match("%d") or #Key > 1) then
+                Utils.Notify("ZAYN HUB", "Prefix sirf 1 symbol hona chahiye!")
+                return
+            end
+            Prefix = Key
+            Utils.Notify("ZAYN HUB", "Naya Prefix: " .. Key)
+        end)
+
+        SettingsSection.Keybind("Command Bar Key", GetKeyName(CommandBarPrefix), function(K1)
+            CommandBarPrefix = K1
+            Utils.Notify("ZAYN HUB", "CMD Bar Key set to: " .. GetKeyName(K1))
+        end)
+
+        -- [[ PROTECTION & BYPASSES ]] --
+        local Bypasses = ScriptPage.NewSection("Security Bypasses")
+
+        Bypasses.Toggle("Anti Kick", Hooks.AntiKick, function(Val)
+            Hooks.AntiKick = Val
+            Utils.Notify("SECURITY", "Anti-Kick " .. (Val and "ON" or "OFF"))
+        end)
+
+        Bypasses.Toggle("Anti Teleport", Hooks.AntiTeleport, function(Val)
+            Hooks.AntiTeleport = Val
+            Utils.Notify("SECURITY", "Anti-TP Bypass " .. (Val and "ON" or "OFF"))
+        end)
+
+        -- [[ UI CUSTOMIZATION (Aesthetic) ]] --
+        local Misc = ScriptPage.NewSection("Interface Options")
+
+        Misc.Toggle("Wide CMD Bar", WideBar, function(Val)
+            WideBar = Val
+            local NewWidth = Val and 400 or 200
+            Utils.Tween(CommandBar, "Quint", "Out", .5, {
+                Size = UDim2.new(0, NewWidth, 0, 35)
+            })
+            SetConfig({WideBar = Val})
+        end)
+
+        Misc.Toggle("Draggable Bar", Draggable, function(Val)
+            Draggable = Val
+            if Val then Utils.Draggable(CommandBar) end
+            Utils.Notify("ZAYN HUB", "Draggable Mode: " .. (Val and "Active" or "Disabled"))
+        end)
+    end
+end
+-- [[ ZAYN HUB - MACROS, PLUGINS & THEMES ]] --
+
+-- [[ MACRO MANAGEMENT ]] --
+local MacrosPage = ConfigUILib.NewPage("Macros")
+local MacroSection;
+MacroSection = MacrosPage.CreateMacroSection(Macros, function(Bind, Command, Args)
+    local AlreadyAdded = false
+    for _, macro in next, Macros do
+        if macro.Command == Command then AlreadyAdded = true end
+    end
+    
+    if CommandsTable[Command] and not AlreadyAdded then
+        -- Zayn Logic: 'un' prefix commands ko auto-toggle banana
+        local MacroType = (Command:sub(1,2) == "un" or CommandsTable["un"..Command]) and "toggle" or Command
+        
+        MacroSection.AddMacro(Command .. " " .. Args, SortKeys(Bind[1], Bind[2]))
+        
+        table.insert(Macros, {
+            Command = MacroType,
+            Args = Args:split(" "),
+            Keys = Bind
+        })
+        
+        -- Save to Local Config (erennn0779 data)
+        local TempMacros = Utils.DeepClone(Macros)
+        for _, m in next, TempMacros do
+            for i, k in next, m.Keys do m.Keys[i] = tostring(k):split(".")[3] end
+        end
+        SetConfig({Macros = TempMacros})
+    end
+end)
+
+-- [[ PLUGIN SYSTEM (Extensibility) ]] --
+local PluginsPage = ConfigUILib.NewPage("Plugins")
+local CurrentPlugins = PluginsPage.NewSection("Active Plugins")
+local PluginSettings = PluginsPage.NewSection("Plugin Core")
+
+CurrentPlugins.ScrollingFrame("Zayn Plugins", function(Option, Enabled)
+    local Config = GetPluginConfig()
+    local Disabled = Config.DisabledPlugins
+    
+    for _, Plugin in next, Plugins do
+        if Plugin[1] == Option then
+            local PName = Plugin[2]().Name
+            if Enabled then Disabled[PName] = nil else Disabled[PName] = true end
+            SetPluginConfig({DisabledPlugins = Disabled})
+            Utils.Notify("PLUGINS", PName .. (Enabled and " Enabled!" or " Disabled!"))
+        end
+    end
+end, Utils.Map(Plugins))
+
+-- [[ THEME ENGINE (Aesthetics) ]] --
+local Themes = ConfigUILib.NewPage("Themes")
+local ColorSection = Themes.NewSection("UI Colors")
+local ThemeOptions = Themes.NewSection("Config")
+
+local RainbowGlobal = false
+ColorSection.ColorPicker("Global Background", UITheme.Background.BackgroundColor, function(Col, IsRainbow)
+    UITheme.Background.BackgroundColor = Col
+    RainbowGlobal = IsRainbow
+end)
+
+-- Sub-component colors (Only update if Global Rainbow is OFF)
+local function SetThemeCol(Comp, Col)
+    if not RainbowGlobal then UITheme[Comp].BackgroundColor = Col end
+end
+
+ColorSection.ColorPicker("CMD Bar", UITheme.CommandBar.BackgroundColor, function(c) SetThemeCol("CommandBar", c) end)
+ColorSection.ColorPicker("Notifications", UITheme.Notification.BackgroundColor, function(c) SetThemeCol("Notification", c) end)
+
+local SaveThemeToggle;
+SaveThemeToggle = ThemeOptions.Toggle("Save Theme Profile", false, function()
+    WriteThemeConfig()
+    task.wait(0.5)
+    SaveThemeToggle() -- Auto-reset toggle
+    Utils.Notify("ZAYN HUB", "Theme successfully saved!")
+end)
+-- [[ ZAYN HUB - THEME RESET & SYSTEM POST-LOAD ]] --
+
+-- Theme Reset Logic: Saare custom colors ko default Zayn Hub aesthetic par lana
+local ToggleReset;
+ToggleReset = Options.Toggle("Reset Theme", false, function(Callback)
+    local Targets = {"Background", "Notification", "CommandBar", "CommandList", "ChatLogs", "Config"}
+    for _, Component in next, Targets do
+        if UITheme[Component] then
+            UITheme[Component].BackgroundColor = "Reset"
+            UITheme[Component].TextColor = "Reset"
+            UITheme[Component].Transparency = "Reset"
+        end
+    end
+    task.wait(0.5)
+    ToggleReset() -- Switch back
+    Utils.Notify("ZAYN HUB", "Theme restored to default High Aura.")
+end)
+
+-- Delayed Initialization: Config load hone ke baad settings apply karna
+task.delay(1, function()
+    -- KeyCodes ko Enum mein convert karna (Bina error ke)
+    for i, Macro in next, Macros do
+        for i2, Key in next, Macro.Keys do
+            Macros[i].Keys[i2] = Enum.KeyCode[Key]
+        end
+    end
+
+    -- Wide Bar Persistence
+    if CurrentConfig.WideBar then
+        WideBar = true
+        Utils.Tween(CommandBar, "Quint", "Out", .5, {
+            Size = UDim2.new(0, 400, 0, 35)
+        })
+    end
+
+    -- Dynamic Alias Loading (Custom command names)
+    local Aliases = CurrentConfig.Aliases
+    if Aliases then
+        for Original, AliasList in next, Aliases do
+            if CommandsTable[Original] then
+                for _, AliasName in next, AliasList do
+                    CommandsTable[AliasName] = CommandsTable[Original]
+                end
+            end
+        end
+    end
+end)
+
+-- [[ MAIN COMMAND BAR EXECUTION ]] --
+AddConnection(CConnect(CommandBar.Input.FocusLost, function(EnterPressed)
+    local RawText = CommandBar.Input.Text:trim()
+    local Args = RawText:split(" ")
+    
+    CommandBarOpen = false
+
+    -- UI Animation: Focus hte hi bar ko wapas hide karna
+    if not Draggable then
+        Utils.TweenAllTrans(CommandBar, .5)
+        Utils.Tween(CommandBar, "Quint", "Out", .5, {
+            Position = UDim2.new(0.5, WideBar and -200 or -100, 1, 5)
+        })
+    end
+
+    local Command = Args[1]
+    table.remove(Args, 1) -- Sirf arguments bachenge
+
+    if Command ~= "" then
+        ExecuteCommand(Command, Args, LocalPlayer)
+    end
+end), Connections.UI, true)
+
+-- [[ PLAYER TRACKING & LIFECYCLE ]] --
+local function InitializePlayer(plr)
+    RespawnTimes[plr.Name] = tick()
+    plr.CharacterAdded:Connect(function()
+        RespawnTimes[plr.Name] = tick()
+    end)
+end
+
+-- Existing aur naye players ke liye system active karna
+for _, plr in next, Players:GetPlayers() do InitializePlayer(plr) end
+Players.PlayerAdded:Connect(InitializePlayer)
+
+-- [[ GLOBAL ACCESS & FINAL NOTIFICATION ]] --
+getgenv().ZAYN_HUB = {
+    Utils = Utils,
+    PluginLibrary = PluginLibrary,
+    GetConfig = GetConfig,
+    Owner = "erennn0779"
+}
+
+local LoadTime = string.format("%.3f", tick() - _L.start)
+Utils.Notify("ZAYN HUB", "Script Loaded in " .. LoadTime .. "s", 5)
+Utils.Notify("WELCOME", "Master Zayn, 'cmds' likho commands dekhne ke liye.", 7)
